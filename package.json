@@ -1,0 +1,32 @@
+{
+  "name": "snh-ai-integration-quickstart",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Integration quickstart for the SNH AI API platform. Submit verification orders and receive webhooks locally via ngrok.",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "tunnel": "ngrok http 3000"
+  },
+  "dependencies": {
+    "next": "^15.5.19",
+    "react": "19.1.0",
+    "react-dom": "19.1.0",
+    "server-only": "^0.0.1"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.1.8",
+    "@types/node": "^22.15.30",
+    "@types/react": "^19.1.6",
+    "@types/react-dom": "^19.1.6",
+    "eslint": "^9.28.0",
+    "eslint-config-next": "^15.5.19",
+    "tailwindcss": "^4.1.8",
+    "typescript": "^5.8.3"
+  },
+  "engines": {
+    "node": ">=20.9.0"
+  }
+}
