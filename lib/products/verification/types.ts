@@ -41,17 +41,46 @@ export interface VerificationFormInput {
   employment: EmploymentHistoryInput
 }
 
+/** Webhook event types delivered by the platform. */
+export type WebhookEventType =
+  | 'verification.completed'
+  | 'verification.action_required'
+  | 'verification.notification'
+
+/**
+ * A single webhook destination. Supplying `events` is important: a target with
+ * no `events` is treated by the platform as `verification.completed` only, so
+ * progress/notification and action-required events would never be delivered.
+ */
+export interface WebhookTarget {
+  url: string
+  events?: WebhookEventType[]
+  secret?: string
+}
+
 /** Webhook target config, attached server-side from env + tunnel detection. */
 export interface WebhookConfig {
   enabled: boolean
   secret?: string
   retryAttempts?: number
-  fallbackEndpoint?: string
+  fallbackEndpoint?: string | WebhookTarget
+}
+
+/**
+ * Per-search overrides. We use `notifications.webhookOverride` so that
+ * `verification.notification` and `verification.action_required` events route to
+ * our endpoint — the top-level `webhookConfig` only governs
+ * `verification.completed`.
+ */
+export interface SearchConfig {
+  notifications?: {
+    webhookOverride?: WebhookConfig
+  }
 }
 
 /** The request body sent to the platform. */
 export interface VerificationOrderRequest {
-  searchTypes: Array<{ searchType: SearchType; externalSearchId?: string }>
+  searchTypes: Array<{ searchType: SearchType; externalSearchId?: string; searchConfig?: SearchConfig }>
   applicant: {
     firstName: string
     lastName: string

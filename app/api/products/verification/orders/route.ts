@@ -26,7 +26,13 @@ export async function POST(request: Request) {
     webhookConfig = {
       enabled: true,
       retryAttempts: 3,
-      fallbackEndpoint: webhookUrlFor(tunnel.url, 'verification'),
+      // Subscribe to every event type. Without an explicit `events` list the
+      // platform delivers only `verification.completed` to this endpoint, so
+      // progress/notification and action-required events would be dropped.
+      fallbackEndpoint: {
+        url: webhookUrlFor(tunnel.url, 'verification'),
+        events: ['verification.completed', 'verification.action_required', 'verification.notification'],
+      },
       ...(env.webhookSecret ? { secret: env.webhookSecret } : {}),
     }
     if (!env.webhookSecret) {
@@ -45,7 +51,10 @@ export async function POST(request: Request) {
       ...result,
       webhook: {
         configured: Boolean(webhookConfig),
-        url: webhookConfig?.fallbackEndpoint ?? null,
+        url:
+          typeof webhookConfig?.fallbackEndpoint === 'string'
+            ? webhookConfig.fallbackEndpoint
+            : webhookConfig?.fallbackEndpoint?.url ?? null,
         signed: Boolean(webhookConfig?.secret),
         note: webhookNote,
       },

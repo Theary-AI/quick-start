@@ -48,6 +48,10 @@ export function buildOrderRequest(form: VerificationFormInput, webhookConfig?: W
       {
         searchType: 'EMPLOYMENT',
         ...(form.externalSearchId ? { externalSearchId: form.externalSearchId } : {}),
+        // The top-level webhookConfig only routes verification.completed. To also
+        // receive notification and action_required events at our endpoint, mirror
+        // the same config into the per-search notifications.webhookOverride.
+        ...(webhookConfig ? { searchConfig: { notifications: { webhookOverride: webhookConfig } } } : {}),
       },
     ],
     applicant: clean({

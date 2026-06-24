@@ -35,7 +35,10 @@ function defaultAuthForApi(apiBaseUrl: string): { domain: string; audience: stri
 }
 
 export function getServerEnv(): ServerEnv {
-  const apiBaseUrl = (process.env.API_BASE_URL ?? 'https://sandbox.theary.com').replace(/\/+$/, '')
+  if(!process.env.API_BASE_URL){
+    throw new Error('API_BASE_URL is not set')
+  }
+  const apiBaseUrl = (process.env.API_BASE_URL).replace(/\/+$/, '')
   const authDefaults = defaultAuthForApi(apiBaseUrl)
   return {
     apiBaseUrl,
