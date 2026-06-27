@@ -20,6 +20,16 @@ export interface ServerEnv {
   authToken: string
   webhookSecret: string
   publicBaseUrl: string
+  /**
+   * Public Records (CRA evaluation framework) config. This is a SEPARATE API
+   * with its own auth: CRA validates HS256 tokens minted by its own
+   * `/auth/token` endpoint, so the verification (Auth0 RS256) token cannot be
+   * reused. Exchange an X-API-Key for a short-lived JWT, or supply a pre-issued
+   * CRA bearer token directly.
+   */
+  publicRecordsApiBaseUrl: string
+  publicRecordsApiKey: string
+  publicRecordsToken: string
 }
 
 /**
@@ -49,6 +59,9 @@ export function getServerEnv(): ServerEnv {
     authToken: process.env.AUTH_TOKEN ?? '',
     webhookSecret: process.env.WEBHOOK_SECRET ?? '',
     publicBaseUrl: (process.env.PUBLIC_BASE_URL ?? '').replace(/\/+$/, ''),
+    publicRecordsApiBaseUrl: (process.env.PUBLIC_RECORDS_API_BASE_URL ?? 'https://cra.pr.stg.snh-ai.com').replace(/\/+$/, ''),
+    publicRecordsApiKey: process.env.PUBLIC_RECORDS_API_KEY ?? '',
+    publicRecordsToken: process.env.PUBLIC_RECORDS_TOKEN ?? '',
   }
 }
 
@@ -75,5 +88,42 @@ export function decodeJwtTenant(jwt: string): { tenant: string | null; warning: 
     return { tenant: payload.tenant, warning: null }
   } catch {
     return { tenant: null, warning: 'Could not decode the token as a JWT.' }
+  }
+}
+
+/**
+ * Decode a JWT payload WITHOUT verifying the signature, returning the raw claims.
+ * Used to surface CRA token info (e.g. `sub`, `tier`, `exp`) in the setup UI.
+ * Never rely on this for security decisions.
+ */
+export function decodeJwtClaims(jwt: string): Record<string, unknown> | null {
+  if (!jwt) return null
+  try {
+    const part = jwt.split('.')[1]
+    if (!part) return null
+    const normalized = part.replace(/-/g, '+').replace(/_/g, '/')
+    const json = Buffer.from(normalized, 'base64').toString('utf8')
+    return JSON.parse(json) as Record<string, unknown>
+  } catch {
+    return null
+  }
+}
+
+/**
+ * Decode a JWT header WITHOUT verifying the signature, returning the `alg`.
+ * Used to detect when a token was issued for a different API (e.g. an Auth0
+ * RS256 token presented to an HS256-only endpoint). Never use for security.
+ */
+export function decodeJwtAlg(jwt: string): string | null {
+  if (!jwt) return null
+  try {
+    const part = jwt.split('.')[0]
+    if (!part) return null
+    const normalized = part.replace(/-/g, '+').replace(/_/g, '/')
+    const json = Buffer.from(normalized, 'base64').toString('utf8')
+    const header = JSON.parse(json) as { alg?: string }
+    return typeof header.alg === 'string' ? header.alg : null
+  } catch {
+    return null
   }
 }

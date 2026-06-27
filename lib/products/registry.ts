@@ -45,13 +45,14 @@ export const PRODUCTS: ProductMeta[] = [
   {
     slug: 'public-records',
     name: 'Public Records',
-    tagline: 'Court, criminal & identity records',
+    tagline: 'Criminal & court record evaluation',
     description:
-      'Search and monitor public records sources. Wire the same order + webhook pattern you learn here to retrieve records and receive updates as results arrive.',
-    status: 'coming-soon',
+      'Submit a criminal/court screening record and synchronously receive a compliance routing decision — search queue, per-offense reportability, and identity scoring — from the evaluation framework.',
+    status: 'live',
     accent: 'emerald',
     icon: 'folder-search',
-    capabilities: ['Records search', 'Continuous monitoring', 'Real-time webhooks'],
+    capabilities: ['Record evaluation', 'Compliance routing', 'Identity scoring', 'Synchronous decision'],
+    docsUrl: 'https://cra.pr.stg.snh-ai.com/docs',
   },
   {
     slug: 'automotive',
