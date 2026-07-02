@@ -37,7 +37,7 @@ export const PRODUCTS: ProductMeta[] = [
     description:
       'Submit a verification order and receive real-time webhook events as our agents research contacts, reach out across email, voice, and fax, and close out the verification.',
     status: 'live',
-    accent: 'indigo',
+    accent: 'violet',
     icon: 'shield-check',
     capabilities: ['Employment verification', 'Education verification', 'Real-time webhooks', 'Accreditation data'],
     docsUrl: 'https://api.theary.ai/docs',
@@ -53,17 +53,6 @@ export const PRODUCTS: ProductMeta[] = [
     icon: 'folder-search',
     capabilities: ['Record evaluation', 'Compliance routing', 'Identity scoring', 'Synchronous decision'],
     docsUrl: 'https://cra.pr.stg.snh-ai.com/docs',
-  },
-  {
-    slug: 'automotive',
-    name: 'Automotive',
-    tagline: 'Dealership & credit workflows',
-    description:
-      'Conversational automotive workflows and credit integrations. Designed to slot into this same quickstart shell when you are ready to evaluate it.',
-    status: 'coming-soon',
-    accent: 'amber',
-    icon: 'car',
-    capabilities: ['Conversational agent', 'Credit integration', 'Real-time streaming'],
   },
 ]
 

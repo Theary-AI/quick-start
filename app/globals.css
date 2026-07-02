@@ -1,22 +1,49 @@
 @import 'tailwindcss';
 
 @theme {
-  --color-canvas: #0b0c10;
-  --color-surface: #14161d;
-  --color-surface-2: #1b1e27;
-  --color-border: #272b36;
-  --font-mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace;
+  /* Brand palette — mirrors the SNH AI marketing site (snh-ai.com) */
+  --color-canvas: #f9fafb; /* page background (gray-50) */
+  --color-surface: #ffffff; /* cards / panels */
+  --color-surface-2: #f3f4f6; /* subtle fills (gray-100) */
+  --color-border: #e5e7eb; /* hairlines (gray-200) */
+  --color-code: #f6f7f9; /* code / JSON blocks */
+
+  --color-ink: #111827; /* headings (gray-900) */
+  --color-body: #374151; /* body copy (gray-700) */
+  --color-muted: #6b7280; /* secondary text (gray-500) */
+  --color-subtle: #9ca3af; /* tertiary text (gray-400) */
+
+  --color-accent: #8b5cf6; /* primary violet */
+  --color-accent-strong: #7c3aed; /* violet-600 (hover) */
+  --color-accent-soft: #f5f3ff; /* violet-50 tint */
+
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-mono: var(--font-ibm-plex-mono), ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 }
 
 :root {
-  color-scheme: dark;
+  color-scheme: light;
 }
 
 html,
 body {
   background-color: var(--color-canvas);
-  color: #e6e8ee;
+  color: var(--color-body);
+  font-family: var(--font-sans);
+  font-weight: 300; /* Inter Light for body copy */
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Headings use Inter Semi Bold per brand type system */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: var(--color-ink);
+  font-weight: 600;
 }
 
 * {
@@ -29,7 +56,7 @@ body {
   height: 8px;
 }
 .scroll-thin::-webkit-scrollbar-thumb {
-  background: #2c303c;
+  background: #d1d5db;
   border-radius: 9999px;
 }
 .scroll-thin::-webkit-scrollbar-track {
@@ -38,7 +65,7 @@ body {
 
 @keyframes flash-in {
   from {
-    background-color: rgba(99, 102, 241, 0.18);
+    background-color: rgba(139, 92, 246, 0.14);
   }
   to {
     background-color: transparent;

@@ -18,14 +18,6 @@ const PATHS: Record<string, React.ReactNode> = {
       <path d="m21 20-1.8-1.8" />
     </>
   ),
-  car: (
-    <>
-      <path d="M5 13l1.5-4.5A2 2 0 0 1 8.4 7h7.2a2 2 0 0 1 1.9 1.5L19 13" />
-      <path d="M4 17h16a1 1 0 0 0 1-1v-2a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v2a1 1 0 0 0 1 1z" />
-      <circle cx="7.5" cy="17.5" r="1.5" />
-      <circle cx="16.5" cy="17.5" r="1.5" />
-    </>
-  ),
   check: <path d="M20 6 9 17l-5-5" />,
   copy: (
     <>

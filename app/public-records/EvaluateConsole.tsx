@@ -112,10 +112,10 @@ function validate(form: PublicRecordsFormInput, xmlInfo: XmlInfo): FieldErrors {
 /** Color treatment for the various queues / decisions in the response. */
 function badgeClass(value: string): string {
   const v = value.toLowerCase()
-  if (/(^|\b)(automation|not[_ ]reportable|clear|pass)/.test(v)) return 'bg-emerald-500/10 text-emerald-300 ring-emerald-500/30'
-  if (/(reportable|fail)/.test(v)) return 'bg-red-500/10 text-red-300 ring-red-500/30'
-  if (/(manual[_ ]review|insufficient|auditor|review|pending)/.test(v)) return 'bg-amber-500/10 text-amber-300 ring-amber-500/30'
-  return 'bg-zinc-600/20 text-zinc-300 ring-zinc-600/40'
+  if (/(^|\b)(automation|not[_ ]reportable|clear|pass)/.test(v)) return 'bg-emerald-50 text-emerald-700 ring-emerald-200'
+  if (/(reportable|fail)/.test(v)) return 'bg-red-50 text-red-700 ring-red-200'
+  if (/(manual[_ ]review|insufficient|auditor|review|pending)/.test(v)) return 'bg-amber-50 text-amber-700 ring-amber-200'
+  return 'bg-[var(--color-surface-2)] text-[var(--color-body)] ring-[var(--color-border)]'
 }
 
 function Badge({ value }: { value: string }) {
@@ -142,13 +142,13 @@ function Field({
   inputMode?: 'text' | 'numeric'
 }) {
   const borderClass = error
-    ? 'border-red-500/60 focus:border-red-500/60 focus:ring-red-500/20'
-    : 'border-[var(--color-border)] focus:border-emerald-500/60 focus:ring-emerald-500/20'
+    ? 'border-red-400 focus:border-red-400 focus:ring-red-500/20'
+    : 'border-[var(--color-border)] focus:border-emerald-500 focus:ring-emerald-500/20'
   return (
     <label className="block">
-      <span className="text-xs font-medium text-zinc-400">
+      <span className="text-xs font-medium text-[var(--color-muted)]">
         {label}
-        {required ? <span className="text-emerald-300"> *</span> : null}
+        {required ? <span className="text-emerald-600"> *</span> : null}
       </span>
       <input
         type={type}
@@ -157,9 +157,9 @@ function Field({
         inputMode={inputMode}
         aria-invalid={error ? true : undefined}
         onChange={(e) => onChange(e.target.value)}
-        className={`mt-1 w-full rounded-lg border bg-[#0d0e14] px-3 py-2 text-sm text-zinc-100 outline-none transition placeholder:text-zinc-600 focus:ring-2 ${borderClass}`}
+        className={`mt-1 w-full rounded-lg border bg-[var(--color-surface)] px-3 py-2 text-sm font-normal text-[var(--color-ink)] outline-none transition placeholder:text-[var(--color-subtle)] focus:ring-2 ${borderClass}`}
       />
-      {error ? <span className="mt-1 block text-xs text-red-300">{error}</span> : null}
+      {error ? <span className="mt-1 block text-xs text-red-600">{error}</span> : null}
     </label>
   )
 }
@@ -167,7 +167,7 @@ function Field({
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <fieldset className="space-y-3">
-      <legend className="text-xs font-semibold uppercase tracking-wide text-zinc-500">{title}</legend>
+      <legend className="text-xs font-semibold uppercase tracking-wide text-[var(--color-subtle)]">{title}</legend>
       {children}
     </fieldset>
   )
@@ -176,12 +176,12 @@ function Section({ title, children }: { title: string; children: React.ReactNode
 function SetupStatus({ data, loading, onRefresh }: { data: ConfigResponse | null; loading: boolean; onRefresh: () => void }) {
   const c = data?.config
   return (
-    <section className="rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-5">
+    <section className="rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-5 shadow-sm">
       <div className="flex items-center justify-between">
-        <h2 className="text-sm font-semibold text-zinc-200">Setup status</h2>
+        <h2 className="text-sm font-semibold text-[var(--color-ink)]">Setup status</h2>
         <button
           onClick={onRefresh}
-          className="rounded-md px-2 py-1 text-xs text-zinc-400 ring-1 ring-[var(--color-border)] transition hover:text-zinc-100"
+          className="rounded-md px-2 py-1 text-xs text-[var(--color-muted)] ring-1 ring-[var(--color-border)] transition hover:bg-[var(--color-surface-2)] hover:text-[var(--color-ink)]"
         >
           {loading ? 'Checking…' : 'Re-check'}
         </button>
@@ -190,42 +190,42 @@ function SetupStatus({ data, loading, onRefresh }: { data: ConfigResponse | null
       <div className="mt-2 divide-y divide-[var(--color-border)]">
         <div className="flex items-center justify-between gap-4 py-2.5">
           <div className="flex items-center gap-2.5">
-            <span className={`h-2 w-2 shrink-0 rounded-full ${data?.health.ok ? 'bg-emerald-400' : 'bg-amber-400'}`} />
-            <span className="text-sm text-zinc-300">API reachable</span>
+            <span className={`h-2 w-2 shrink-0 rounded-full ${data?.health.ok ? 'bg-emerald-500' : 'bg-amber-500'}`} />
+            <span className="text-sm text-[var(--color-body)]">API reachable</span>
           </div>
-          <span className="font-mono text-xs text-zinc-400">{c?.apiBaseUrl}</span>
+          <span className="font-mono text-xs text-[var(--color-muted)]">{c?.apiBaseUrl}</span>
         </div>
 
         <div className="flex items-center justify-between gap-4 py-2.5">
           <div className="flex items-center gap-2.5">
-            <span className={`h-2 w-2 shrink-0 rounded-full ${c?.hasCredentials && c?.authMethod ? 'bg-emerald-400' : 'bg-amber-400'}`} />
-            <span className="text-sm text-zinc-300">Authentication</span>
+            <span className={`h-2 w-2 shrink-0 rounded-full ${c?.hasCredentials && c?.authMethod ? 'bg-emerald-500' : 'bg-amber-500'}`} />
+            <span className="text-sm text-[var(--color-body)]">Authentication</span>
           </div>
-          <div className="text-right text-sm text-zinc-400">
+          <div className="text-right text-sm text-[var(--color-muted)]">
             {c?.hasCredentials ? (
               c.authMethod ? (
                 <span>
-                  <span className="text-zinc-500">{AUTH_METHOD_LABEL[c.authMethod]}</span>
+                  <span className="text-[var(--color-subtle)]">{AUTH_METHOD_LABEL[c.authMethod]}</span>
                   {c.tokenSubject ? (
                     <>
-                      <span className="text-zinc-500"> · </span>
-                      <span className="font-mono text-xs text-emerald-300">{c.tokenSubject}</span>
+                      <span className="text-[var(--color-subtle)]"> · </span>
+                      <span className="font-mono text-xs text-emerald-600">{c.tokenSubject}</span>
                     </>
                   ) : null}
-                  {c.tokenTier ? <span className="text-zinc-500"> · {c.tokenTier}</span> : null}
+                  {c.tokenTier ? <span className="text-[var(--color-subtle)]"> · {c.tokenTier}</span> : null}
                 </span>
               ) : (
-                <span className="text-amber-300">credentials set, token not obtained</span>
+                <span className="text-amber-600">credentials set, token not obtained</span>
               )
             ) : (
-              <span className="text-amber-300">missing — set PUBLIC_RECORDS_API_KEY or PUBLIC_RECORDS_TOKEN</span>
+              <span className="text-amber-600">missing — set PUBLIC_RECORDS_API_KEY or PUBLIC_RECORDS_TOKEN</span>
             )}
           </div>
         </div>
       </div>
 
       {c?.tokenWarning ? (
-        <p className="mt-3 rounded-md bg-amber-500/10 px-3 py-2 text-xs text-amber-300 ring-1 ring-amber-500/25">{c.tokenWarning}</p>
+        <p className="mt-3 rounded-md bg-amber-50 px-3 py-2 text-xs text-amber-700 ring-1 ring-amber-200">{c.tokenWarning}</p>
       ) : null}
     </section>
   )
@@ -336,10 +336,10 @@ export function EvaluateConsole() {
 
       <div className="grid gap-6 lg:grid-cols-2">
         {/* Left: record form */}
-        <div className="space-y-5 rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-5">
+        <div className="space-y-5 rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-5 shadow-sm">
           <div className="flex items-center justify-between">
-            <h2 className="text-sm font-semibold text-zinc-200">Evaluate a public record</h2>
-            <button onClick={reset} className="text-xs text-zinc-500 transition hover:text-zinc-300">
+            <h2 className="text-sm font-semibold text-[var(--color-ink)]">Evaluate a public record</h2>
+            <button onClick={reset} className="text-xs text-[var(--color-muted)] transition hover:text-[var(--color-ink)]">
               Reset sample
             </button>
           </div>
@@ -362,9 +362,9 @@ export function EvaluateConsole() {
             </div>
             {offenseChips.length > 0 ? (
               <div className="flex flex-wrap items-center gap-1.5">
-                <span className="text-xs text-zinc-500">Parsed {offenseChips.length}:</span>
+                <span className="text-xs text-[var(--color-subtle)]">Parsed {offenseChips.length}:</span>
                 {offenseChips.map((id) => (
-                  <span key={id} className="rounded-md bg-[var(--color-surface-2)] px-2 py-0.5 font-mono text-xs text-zinc-300 ring-1 ring-[var(--color-border)]">
+                  <span key={id} className="rounded-md bg-[var(--color-surface-2)] px-2 py-0.5 font-mono text-xs text-[var(--color-body)] ring-1 ring-[var(--color-border)]">
                     {id}
                   </span>
                 ))}
@@ -387,15 +387,15 @@ export function EvaluateConsole() {
 
           <Section title="Screening XML">
             <label className="block">
-              <span className="flex items-center justify-between text-xs font-medium text-zinc-400">
+              <span className="flex items-center justify-between text-xs font-medium text-[var(--color-muted)]">
                 <span>
-                  Raw record XML<span className="text-emerald-300"> *</span>
+                  Raw record XML<span className="text-emerald-600"> *</span>
                 </span>
                 {form.xml.trim() ? (
                   xmlInfo.ok ? (
-                    <span className="text-emerald-300">well-formed · {xmlInfo.caseCount} case{xmlInfo.caseCount === 1 ? '' : 's'}</span>
+                    <span className="text-emerald-600">well-formed · {xmlInfo.caseCount} case{xmlInfo.caseCount === 1 ? '' : 's'}</span>
                   ) : (
-                    <span className="text-red-300">{xmlInfo.error}</span>
+                    <span className="text-red-600">{xmlInfo.error}</span>
                   )
                 ) : null}
               </span>
@@ -405,10 +405,10 @@ export function EvaluateConsole() {
                 rows={6}
                 spellCheck={false}
                 aria-invalid={err('xml') ? true : undefined}
-                className={`scroll-thin mt-1 w-full rounded-lg border bg-[#0d0e14] px-3 py-2 font-mono text-xs leading-relaxed text-zinc-100 outline-none transition placeholder:text-zinc-600 focus:ring-2 ${
+                className={`scroll-thin mt-1 w-full rounded-lg border bg-[var(--color-code)] px-3 py-2 font-mono text-xs leading-relaxed text-[var(--color-ink)] outline-none transition placeholder:text-[var(--color-subtle)] focus:ring-2 ${
                   err('xml')
-                    ? 'border-red-500/60 focus:border-red-500/60 focus:ring-red-500/20'
-                    : 'border-[var(--color-border)] focus:border-emerald-500/60 focus:ring-emerald-500/20'
+                    ? 'border-red-400 focus:border-red-400 focus:ring-red-500/20'
+                    : 'border-[var(--color-border)] focus:border-emerald-500 focus:ring-emerald-500/20'
                 }`}
               />
             </label>
@@ -416,13 +416,13 @@ export function EvaluateConsole() {
 
           <div className="space-y-3 pt-1">
             {attempted && errorCount > 0 ? (
-              <p className="rounded-md bg-red-500/10 px-3 py-2 text-xs text-red-300 ring-1 ring-red-500/25">
+              <p className="rounded-md bg-red-50 px-3 py-2 text-xs text-red-700 ring-1 ring-red-200">
                 Fix {errorCount} field{errorCount === 1 ? '' : 's'} above before submitting.
               </p>
             ) : null}
             {!configLoading && !hasCredentials ? (
-              <p className="rounded-md bg-amber-500/10 px-3 py-2 text-xs text-amber-300 ring-1 ring-amber-500/25">
-                No Public Records credentials detected. Set <code>PUBLIC_RECORDS_API_KEY</code> in <code>.env.local</code> and restart.
+              <p className="rounded-md bg-amber-50 px-3 py-2 text-xs text-amber-700 ring-1 ring-amber-200">
+                No Public Records credentials detected. Set <code className="font-mono">PUBLIC_RECORDS_API_KEY</code> in <code className="font-mono">.env.local</code> and restart.
               </p>
             ) : null}
 
@@ -430,13 +430,13 @@ export function EvaluateConsole() {
               onClick={submit}
               disabled={submitting || !hasCredentials}
               title={!hasCredentials ? 'Configure PUBLIC_RECORDS_API_KEY first' : 'Cmd/Ctrl + Enter'}
-              className="flex w-full items-center justify-center gap-2 rounded-lg bg-emerald-500 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-emerald-400 disabled:cursor-not-allowed disabled:opacity-60"
+              className="flex w-full items-center justify-center gap-2 rounded-lg bg-emerald-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-700 disabled:cursor-not-allowed disabled:opacity-60"
             >
               <Icon name="bolt" className="h-4 w-4" />
               {submitting ? 'Evaluating…' : 'Evaluate record'}
             </button>
 
-            <button onClick={() => setShowPreview((s) => !s)} className="text-xs text-zinc-500 transition hover:text-zinc-300">
+            <button onClick={() => setShowPreview((s) => !s)} className="text-xs text-[var(--color-muted)] transition hover:text-[var(--color-ink)]">
               {showPreview ? 'Hide' : 'Show'} request body (POST /evaluate)
             </button>
             {showPreview ? <JsonView value={previewBody} maxHeight="18rem" /> : null}
@@ -444,7 +444,7 @@ export function EvaluateConsole() {
         </div>
 
         {/* Right: decision */}
-        <div className="rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)]/40 p-4">
+        <div className="rounded-xl border border-[var(--color-border)] bg-[var(--color-surface-2)]/60 p-4">
           {submitting ? <LoadingState /> : result ? <ResultPanel result={result} /> : <EmptyState />}
         </div>
       </div>
@@ -455,8 +455,8 @@ export function EvaluateConsole() {
 function LoadingState() {
   return (
     <div className="flex h-full min-h-[20rem] flex-col items-center justify-center gap-3 rounded-lg border border-dashed border-[var(--color-border)] text-center">
-      <span className="h-6 w-6 animate-spin rounded-full border-2 border-emerald-500/30 border-t-emerald-400" />
-      <p className="text-sm text-zinc-400">Evaluating record…</p>
+      <span className="h-6 w-6 animate-spin rounded-full border-2 border-emerald-200 border-t-emerald-600" />
+      <p className="text-sm text-[var(--color-muted)]">Evaluating record…</p>
     </div>
   )
 }
@@ -464,8 +464,8 @@ function LoadingState() {
 function EmptyState() {
   return (
     <div className="flex h-full min-h-[20rem] flex-col items-center justify-center gap-2 rounded-lg border border-dashed border-[var(--color-border)] text-center">
-      <p className="text-sm text-zinc-400">No decision yet</p>
-      <p className="max-w-xs text-xs text-zinc-600">
+      <p className="text-sm text-[var(--color-muted)]">No decision yet</p>
+      <p className="max-w-xs text-xs text-[var(--color-subtle)]">
         Evaluate a record to see the compliance routing decision — search queue, per-offense reportability, and identity scoring.
       </p>
     </div>
@@ -475,12 +475,12 @@ function EmptyState() {
 function ValidationIssues({ issues }: { issues: unknown[] }) {
   if (!issues.length) return null
   return (
-    <div className="space-y-1.5 rounded-lg border border-amber-500/30 bg-amber-500/5 p-3">
-      <p className="text-xs font-semibold text-amber-300">Data quality issues</p>
-      <ul className="space-y-1 text-xs text-zinc-300">
+    <div className="space-y-1.5 rounded-lg border border-amber-200 bg-amber-50 p-3">
+      <p className="text-xs font-semibold text-amber-700">Data quality issues</p>
+      <ul className="space-y-1 text-xs text-[var(--color-body)]">
         {issues.map((issue, i) => (
           <li key={i} className="flex gap-2">
-            <span className="text-amber-400">•</span>
+            <span className="text-amber-500">•</span>
             <span className="break-words">{typeof issue === 'string' ? issue : JSON.stringify(issue)}</span>
           </li>
         ))}
@@ -493,33 +493,33 @@ function OffenseRow({ offense }: { offense: OffenseDecision }) {
   return (
     <div className="rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] p-3">
       <div className="flex flex-wrap items-center justify-between gap-2">
-        <span className="text-sm text-zinc-200">{offense.charge || 'Not Specified'}</span>
+        <span className="text-sm text-[var(--color-ink)]">{offense.charge || 'Not Specified'}</span>
         {offense.charge_decision ? <Badge value={offense.charge_decision} /> : null}
       </div>
       <dl className="mt-2 grid grid-cols-2 gap-x-4 gap-y-1 text-xs">
         <div className="flex justify-between gap-2">
-          <dt className="text-zinc-500">offense_id</dt>
-          <dd className="font-mono text-zinc-300">{offense.offense_id}</dd>
+          <dt className="text-[var(--color-muted)]">offense_id</dt>
+          <dd className="font-mono text-[var(--color-body)]">{offense.offense_id}</dd>
         </div>
         <div className="flex justify-between gap-2">
-          <dt className="text-zinc-500">queue</dt>
-          <dd className="text-zinc-300">{offense.routing?.queue ?? '—'}</dd>
+          <dt className="text-[var(--color-muted)]">queue</dt>
+          <dd className="text-[var(--color-body)]">{offense.routing?.queue ?? '—'}</dd>
         </div>
         <div className="flex justify-between gap-2">
-          <dt className="text-zinc-500">reportability</dt>
-          <dd className="text-zinc-300">{offense.routing?.reportability ?? '—'}</dd>
+          <dt className="text-[var(--color-muted)]">reportability</dt>
+          <dd className="text-[var(--color-body)]">{offense.routing?.reportability ?? '—'}</dd>
         </div>
         <div className="flex justify-between gap-2">
-          <dt className="text-zinc-500">automatable</dt>
-          <dd className="text-zinc-300">{offense.routing ? (offense.routing.is_automatable ? 'yes' : 'no') : '—'}</dd>
+          <dt className="text-[var(--color-muted)]">automatable</dt>
+          <dd className="text-[var(--color-body)]">{offense.routing ? (offense.routing.is_automatable ? 'yes' : 'no') : '—'}</dd>
         </div>
         <div className="flex justify-between gap-2">
-          <dt className="text-zinc-500">identity</dt>
-          <dd className="text-zinc-300">{offense.routing?.identity_level ?? '—'}</dd>
+          <dt className="text-[var(--color-muted)]">identity</dt>
+          <dd className="text-[var(--color-body)]">{offense.routing?.identity_level ?? '—'}</dd>
         </div>
         <div className="flex justify-between gap-2">
-          <dt className="text-zinc-500">identity_score</dt>
-          <dd className="font-mono text-zinc-300">{offense.routing?.identity_score ?? '—'}</dd>
+          <dt className="text-[var(--color-muted)]">identity_score</dt>
+          <dd className="font-mono text-[var(--color-body)]">{offense.routing?.identity_score ?? '—'}</dd>
         </div>
       </dl>
     </div>
@@ -550,10 +550,10 @@ function ResultPanel({ result }: { result: EvaluateResult }) {
   if (!result.ok || !result.data?.success) {
     const hint = errorHint(result.status)
     return (
-      <div className="space-y-2 rounded-lg border border-red-500/30 bg-red-500/5 p-4">
-        <div className="text-sm font-semibold text-red-300">Evaluation failed{result.status ? ` (HTTP ${result.status})` : ''}</div>
-        {hint ? <p className="text-xs text-amber-300">{hint}</p> : null}
-        <p className="break-words text-xs text-zinc-300">{result.error ?? 'The evaluation API returned an unsuccessful response.'}</p>
+      <div className="space-y-2 rounded-lg border border-red-200 bg-red-50 p-4">
+        <div className="text-sm font-semibold text-red-700">Evaluation failed{result.status ? ` (HTTP ${result.status})` : ''}</div>
+        {hint ? <p className="text-xs text-amber-700">{hint}</p> : null}
+        <p className="break-words text-xs text-[var(--color-body)]">{result.error ?? 'The evaluation API returned an unsuccessful response.'}</p>
         {result.data ? <JsonView value={result.data} maxHeight="20rem" /> : null}
       </div>
     )
@@ -566,10 +566,10 @@ function ResultPanel({ result }: { result: EvaluateResult }) {
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2 text-sm font-semibold text-emerald-300">
+        <div className="flex items-center gap-2 text-sm font-semibold text-emerald-700">
           <Icon name="check" className="h-4 w-4" /> Evaluation complete
         </div>
-        <button onClick={() => setShowRaw((s) => !s)} className="text-xs text-zinc-500 transition hover:text-zinc-300">
+        <button onClick={() => setShowRaw((s) => !s)} className="text-xs text-[var(--color-muted)] transition hover:text-[var(--color-ink)]">
           {showRaw ? 'Hide' : 'Show'} raw JSON
         </button>
       </div>
@@ -579,26 +579,26 @@ function ResultPanel({ result }: { result: EvaluateResult }) {
           <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
             {decision.search_queue ? (
               <div className="space-y-1">
-                <p className="text-xs text-zinc-500">Search queue</p>
+                <p className="text-xs text-[var(--color-muted)]">Search queue</p>
                 <Badge value={decision.search_queue} />
               </div>
             ) : null}
             {decision.record_decision ? (
               <div className="space-y-1">
-                <p className="text-xs text-zinc-500">Record decision</p>
+                <p className="text-xs text-[var(--color-muted)]">Record decision</p>
                 <Badge value={decision.record_decision} />
               </div>
             ) : null}
             {data?.status ? (
               <div className="space-y-1">
-                <p className="text-xs text-zinc-500">Status</p>
+                <p className="text-xs text-[var(--color-muted)]">Status</p>
                 <Badge value={data.status} />
               </div>
             ) : null}
           </div>
         </div>
       ) : (
-        <p className="rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] p-4 text-xs text-zinc-400">
+        <p className="rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] p-4 text-xs text-[var(--color-muted)]">
           The API returned success but no decision payload. See the raw JSON for details.
         </p>
       )}
@@ -608,13 +608,13 @@ function ResultPanel({ result }: { result: EvaluateResult }) {
       {decision?.court_decisions?.map((court, ci) => (
         <div key={court.court_search_id ?? ci} className="space-y-2">
           <div className="flex flex-wrap items-center gap-2">
-            <span className="font-mono text-xs text-zinc-400">{court.court_search_id}</span>
+            <span className="font-mono text-xs text-[var(--color-muted)]">{court.court_search_id}</span>
             {court.court_queue ? <Badge value={court.court_queue} /> : null}
           </div>
           {court.case_decisions?.map((c, idx) => (
-            <div key={c.case_number ?? idx} className="space-y-2 rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)]/60 p-3">
+            <div key={c.case_number ?? idx} className="space-y-2 rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] p-3">
               <div className="flex flex-wrap items-center justify-between gap-2">
-                <span className="text-xs text-zinc-300">
+                <span className="text-xs text-[var(--color-body)]">
                   Case <span className="font-mono">{c.case_number}</span>
                 </span>
                 {c.case_queue ? <Badge value={c.case_queue} /> : null}
@@ -632,20 +632,20 @@ function ResultPanel({ result }: { result: EvaluateResult }) {
       <dl className="grid grid-cols-2 gap-x-4 gap-y-1 text-xs">
         {data?.search_id ? (
           <div className="flex justify-between gap-2">
-            <dt className="text-zinc-500">search_id</dt>
-            <dd className="font-mono text-zinc-300">{data.search_id}</dd>
+            <dt className="text-[var(--color-muted)]">search_id</dt>
+            <dd className="font-mono text-[var(--color-body)]">{data.search_id}</dd>
           </div>
         ) : null}
         {data?.correlation_id ? (
           <div className="flex justify-between gap-2">
-            <dt className="text-zinc-500">correlation_id</dt>
-            <dd className="truncate font-mono text-zinc-300">{data.correlation_id}</dd>
+            <dt className="text-[var(--color-muted)]">correlation_id</dt>
+            <dd className="truncate font-mono text-[var(--color-body)]">{data.correlation_id}</dd>
           </div>
         ) : null}
         {data?.timing?.total_ms !== undefined ? (
           <div className="flex justify-between gap-2">
-            <dt className="text-zinc-500">total_ms</dt>
-            <dd className="font-mono text-zinc-300">{data.timing.total_ms}</dd>
+            <dt className="text-[var(--color-muted)]">total_ms</dt>
+            <dd className="font-mono text-[var(--color-body)]">{data.timing.total_ms}</dd>
           </div>
         ) : null}
       </dl>

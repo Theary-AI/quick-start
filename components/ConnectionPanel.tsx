@@ -23,7 +23,7 @@ const AUTH_METHOD_LABEL: Record<'env-token' | 'client-credentials', string> = {
 }
 
 function StatusDot({ ok }: { ok: boolean }) {
-  return <span className={`h-2 w-2 shrink-0 rounded-full ${ok ? 'bg-emerald-400' : 'bg-amber-400'}`} />
+  return <span className={`h-2 w-2 shrink-0 rounded-full ${ok ? 'bg-emerald-500' : 'bg-amber-500'}`} />
 }
 
 function Row({ ok, label, children }: { ok: boolean; label: string; children: React.ReactNode }) {
@@ -31,9 +31,9 @@ function Row({ ok, label, children }: { ok: boolean; label: string; children: Re
     <div className="flex items-center justify-between gap-4 py-2.5">
       <div className="flex items-center gap-2.5">
         <StatusDot ok={ok} />
-        <span className="text-sm text-zinc-300">{label}</span>
+        <span className="text-sm text-[var(--color-body)]">{label}</span>
       </div>
-      <div className="text-right text-sm text-zinc-400">{children}</div>
+      <div className="text-right text-sm text-[var(--color-muted)]">{children}</div>
     </div>
   )
 }
@@ -65,12 +65,12 @@ export function ConnectionPanel({ product = 'verification' }: { product?: string
   }
 
   return (
-    <section className="rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-5">
+    <section className="rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-5 shadow-sm">
       <div className="flex items-center justify-between">
-        <h2 className="text-sm font-semibold text-zinc-200">Setup status</h2>
+        <h2 className="text-sm font-semibold text-[var(--color-ink)]">Setup status</h2>
         <button
           onClick={refresh}
-          className="rounded-md px-2 py-1 text-xs text-zinc-400 ring-1 ring-[var(--color-border)] transition hover:text-zinc-100"
+          className="rounded-md px-2 py-1 text-xs text-[var(--color-muted)] ring-1 ring-[var(--color-border)] transition hover:bg-[var(--color-surface-2)] hover:text-[var(--color-ink)]"
         >
           {loading ? 'Checking…' : 'Re-check'}
         </button>
@@ -85,16 +85,16 @@ export function ConnectionPanel({ product = 'verification' }: { product?: string
           {data?.config.hasCredentials ? (
             data.config.tokenTenant ? (
               <span>
-                <span className="text-zinc-500">{data.config.authMethod ? AUTH_METHOD_LABEL[data.config.authMethod] : ''} · </span>
-                tenant <span className="font-mono text-xs text-emerald-300">{data.config.tokenTenant}</span>
+                <span className="text-[var(--color-subtle)]">{data.config.authMethod ? AUTH_METHOD_LABEL[data.config.authMethod] : ''} · </span>
+                tenant <span className="font-mono text-xs text-emerald-600">{data.config.tokenTenant}</span>
               </span>
             ) : data.config.authMethod ? (
-              <span className="text-amber-300">{AUTH_METHOD_LABEL[data.config.authMethod]} · no tenant claim</span>
+              <span className="text-amber-600">{AUTH_METHOD_LABEL[data.config.authMethod]} · no tenant claim</span>
             ) : (
-              <span className="text-amber-300">credentials set, token not obtained</span>
+              <span className="text-amber-600">credentials set, token not obtained</span>
             )
           ) : (
-            <span className="text-amber-300">missing — set AUTH_CLIENT_ID + AUTH_CLIENT_SECRET</span>
+            <span className="text-amber-600">missing — set AUTH_CLIENT_ID + AUTH_CLIENT_SECRET</span>
           )}
         </Row>
 
@@ -107,25 +107,25 @@ export function ConnectionPanel({ product = 'verification' }: { product?: string
             <button
               onClick={copyWebhook}
               title="Copy webhook URL"
-              className="inline-flex max-w-[22rem] items-center gap-1.5 truncate rounded-md bg-[var(--color-surface-2)] px-2 py-1 font-mono text-xs text-zinc-300 ring-1 ring-[var(--color-border)] transition hover:text-zinc-100"
+              className="inline-flex max-w-[22rem] items-center gap-1.5 truncate rounded-md bg-[var(--color-surface-2)] px-2 py-1 font-mono text-xs text-[var(--color-body)] ring-1 ring-[var(--color-border)] transition hover:text-[var(--color-ink)]"
             >
               <Icon name={copied ? 'check' : 'copy'} className="h-3.5 w-3.5 shrink-0" />
               <span className="truncate">{data.tunnel.webhookUrl}</span>
             </button>
           ) : (
-            <span className="text-amber-300">start ngrok or set PUBLIC_BASE_URL</span>
+            <span className="text-amber-600">start ngrok or set PUBLIC_BASE_URL</span>
           )}
         </Row>
       </div>
 
       {data?.config.tokenWarning ? (
-        <p className="mt-3 rounded-md bg-amber-500/10 px-3 py-2 text-xs text-amber-300 ring-1 ring-amber-500/25">
+        <p className="mt-3 rounded-md bg-amber-50 px-3 py-2 text-xs text-amber-700 ring-1 ring-amber-200">
           {data.config.tokenWarning}
         </p>
       ) : null}
       {data && !data.tunnel.publicBaseUrl ? (
-        <p className="mt-3 rounded-md bg-zinc-700/20 px-3 py-2 text-xs text-zinc-400 ring-1 ring-[var(--color-border)]">
-          Run <code className="text-zinc-200">npm run tunnel</code> in a second terminal to expose this app, then re-check.
+        <p className="mt-3 rounded-md bg-[var(--color-surface-2)] px-3 py-2 text-xs text-[var(--color-muted)] ring-1 ring-[var(--color-border)]">
+          Run <code className="font-mono text-[var(--color-ink)]">npm run tunnel</code> in a second terminal to expose this app, then re-check.
           The detected URL is attached automatically when you submit an order.
         </p>
       ) : null}
