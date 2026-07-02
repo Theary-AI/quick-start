@@ -38,32 +38,65 @@ function defineTheme(monaco: Monaco) {
   })
 }
 
+export type { CodeSnippet } from '@/lib/products/verification/snippets'
+
 const LANG_LABEL: Record<CodeSnippet['language'], string> = {
   typescript: 'TypeScript',
   json: 'JSON',
   bash: 'Shell',
 }
 
-/** Groups that form a linear "do this in order" journey (numbered). */
-const SEQUENTIAL_GROUPS = new Set<string>(['Call the API', 'Receive webhooks'])
+/** Per-accent class sets so each product keeps its own colour language. */
+type Accent = 'violet' | 'emerald'
 
-/** Global step number per snippet in the sequential groups (1, 2, 3 …). */
-const STEP_BY_ID: Record<string, number> = (() => {
-  const map: Record<string, number> = {}
-  let step = 0
-  for (const group of SNIPPET_GROUPS) {
-    if (!SEQUENTIAL_GROUPS.has(group)) continue
-    for (const s of SNIPPETS.filter((s) => s.group === group)) map[s.id] = ++step
+const ACCENT: Record<
+  Accent,
+  {
+    activeNav: string
+    stepActive: string
+    tabUnderline: string
+    selectFocus: string
+    stepperHover: string
+    chevronHover: string
   }
-  return map
-})()
+> = {
+  violet: {
+    activeNav: 'bg-[var(--color-accent-soft)] font-medium text-[var(--color-accent-strong)] ring-1 ring-[var(--color-accent)]/25',
+    stepActive: 'bg-[image:var(--gradient-brand)] text-white',
+    tabUnderline: 'border-[var(--color-accent)]',
+    selectFocus: 'focus:border-[var(--color-accent)] focus:ring-[var(--color-accent)]/20',
+    stepperHover: 'hover:border-[var(--color-accent)]/40',
+    chevronHover: 'group-hover:text-[var(--color-accent)]',
+  },
+  emerald: {
+    activeNav: 'bg-emerald-50 font-medium text-emerald-700 ring-1 ring-emerald-500/25',
+    stepActive: 'bg-[linear-gradient(135deg,#10b981,#14b8a6)] text-white',
+    tabUnderline: 'border-emerald-500',
+    selectFocus: 'focus:border-emerald-500 focus:ring-emerald-500/20',
+    stepperHover: 'hover:border-emerald-300',
+    chevronHover: 'group-hover:text-emerald-600',
+  },
+}
 
-/** Colour that ties each webhook-form snippet to its badge in the live feed. */
+/** Default colour that ties each webhook-form snippet to its badge in the feed. */
 function eventDotClass(id: string): string {
   if (id.includes('completed')) return 'bg-emerald-500'
   if (id.includes('notification')) return 'bg-sky-500'
   if (id.includes('action-required')) return 'bg-amber-500'
   return 'bg-[var(--color-subtle)]'
+}
+
+export interface CodeExplorerProps {
+  /** Snippets to show. Defaults to the verification set. */
+  snippets?: CodeSnippet[]
+  /** Ordered group headings shown in the nav. */
+  groups?: readonly string[]
+  /** Groups rendered as a numbered "do this in order" journey. */
+  sequentialGroups?: string[]
+  /** Dot colour for snippets in non-sequential (reference) groups. */
+  dotClassForId?: (id: string) => string
+  /** Accent colour language (per product). */
+  accent?: Accent
 }
 
 /** Filename shown in the editor tab, with sensible fallbacks per language. */
@@ -91,14 +124,34 @@ function FileIcon({ className = 'h-3.5 w-3.5' }: { className?: string }) {
   )
 }
 
-export function CodeExplorer() {
-  const [activeId, setActiveId] = useState<string>(SNIPPETS[0].id)
+export function CodeExplorer({
+  snippets = SNIPPETS,
+  groups = SNIPPET_GROUPS,
+  sequentialGroups = ['Call the API', 'Receive webhooks'],
+  dotClassForId = eventDotClass,
+  accent = 'violet',
+}: CodeExplorerProps = {}) {
+  const [activeId, setActiveId] = useState<string>(snippets[0].id)
   const [copied, setCopied] = useState(false)
 
-  const index = useMemo(() => Math.max(0, SNIPPETS.findIndex((s) => s.id === activeId)), [activeId])
-  const active = SNIPPETS[index]
-  const prev = index > 0 ? SNIPPETS[index - 1] : null
-  const next = index < SNIPPETS.length - 1 ? SNIPPETS[index + 1] : null
+  const theme = ACCENT[accent]
+  const sequential = useMemo(() => new Set(sequentialGroups), [sequentialGroups])
+
+  /** Global step number per snippet in the sequential groups (1, 2, 3 …). */
+  const stepById = useMemo(() => {
+    const map: Record<string, number> = {}
+    let step = 0
+    for (const group of groups) {
+      if (!sequential.has(group)) continue
+      for (const s of snippets.filter((s) => s.group === group)) map[s.id] = ++step
+    }
+    return map
+  }, [snippets, groups, sequential])
+
+  const index = useMemo(() => Math.max(0, snippets.findIndex((s) => s.id === activeId)), [snippets, activeId])
+  const active = snippets[index]
+  const prev = index > 0 ? snippets[index - 1] : null
+  const next = index < snippets.length - 1 ? snippets[index + 1] : null
   const lineCount = useMemo(() => active.code.split('\n').length, [active])
 
   // Auto-size the editor to the snippet (with a sensible cap) so there's no
@@ -119,13 +172,13 @@ export function CodeExplorer() {
         <select
           value={activeId}
           onChange={(e) => setActiveId(e.target.value)}
-          className="w-full rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] px-3 py-2 text-sm text-[var(--color-ink)] outline-none transition focus:border-[var(--color-accent)] focus:ring-2 focus:ring-[var(--color-accent)]/20"
+          className={`w-full rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] px-3 py-2 text-sm text-[var(--color-ink)] outline-none transition focus:ring-2 ${theme.selectFocus}`}
         >
-          {SNIPPET_GROUPS.map((group) => (
+          {groups.map((group) => (
             <optgroup key={group} label={group}>
-              {SNIPPETS.filter((s) => s.group === group).map((s) => (
+              {snippets.filter((s) => s.group === group).map((s) => (
                 <option key={s.id} value={s.id}>
-                  {STEP_BY_ID[s.id] ? `${STEP_BY_ID[s.id]}. ` : ''}
+                  {stepById[s.id] ? `${stepById[s.id]}. ` : ''}
                   {s.title}
                 </option>
               ))}
@@ -137,13 +190,13 @@ export function CodeExplorer() {
       {/* Sticky grouped navigation on large screens */}
       <nav className="hidden self-start lg:sticky lg:top-24 lg:block">
         <div className="space-y-4">
-          {SNIPPET_GROUPS.map((group) => {
-            const numbered = SEQUENTIAL_GROUPS.has(group)
+          {groups.map((group) => {
+            const numbered = sequential.has(group)
             return (
               <div key={group}>
                 <p className="px-1 text-[11px] font-semibold uppercase tracking-wide text-[var(--color-subtle)]">{group}</p>
                 <ul className="mt-1.5 space-y-0.5">
-                  {SNIPPETS.filter((s) => s.group === group).map((s) => {
+                  {snippets.filter((s) => s.group === group).map((s) => {
                     const isActive = s.id === active.id
                     return (
                       <li key={s.id}>
@@ -151,23 +204,21 @@ export function CodeExplorer() {
                           onClick={() => setActiveId(s.id)}
                           aria-current={isActive ? 'true' : undefined}
                           className={`group/item flex w-full items-center gap-2.5 rounded-lg px-2.5 py-2 text-left text-sm transition ${
-                            isActive
-                              ? 'bg-[var(--color-accent-soft)] font-medium text-[var(--color-accent-strong)] ring-1 ring-[var(--color-accent)]/25'
-                              : 'text-[var(--color-body)] hover:bg-[var(--color-surface-2)]'
+                            isActive ? theme.activeNav : 'text-[var(--color-body)] hover:bg-[var(--color-surface-2)]'
                           }`}
                         >
                           {numbered ? (
                             <span
                               className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-[11px] font-semibold transition ${
                                 isActive
-                                  ? 'bg-[image:var(--gradient-brand)] text-white'
-                                  : 'bg-[var(--color-surface-2)] text-[var(--color-muted)] ring-1 ring-[var(--color-border)] group-hover/item:ring-[var(--color-accent)]/30'
+                                  ? theme.stepActive
+                                  : 'bg-[var(--color-surface-2)] text-[var(--color-muted)] ring-1 ring-[var(--color-border)]'
                               }`}
                             >
-                              {STEP_BY_ID[s.id]}
+                              {stepById[s.id]}
                             </span>
                           ) : (
-                            <span className={`h-2 w-2 shrink-0 rounded-full ${eventDotClass(s.id)}`} />
+                            <span className={`h-2 w-2 shrink-0 rounded-full ${dotClassForId(s.id)}`} />
                           )}
                           <span className="truncate">{s.title}</span>
                         </button>
@@ -189,7 +240,7 @@ export function CodeExplorer() {
               <span className="text-[11px] font-semibold uppercase tracking-wide text-[var(--color-subtle)]">{active.group}</span>
               <span className="text-[var(--color-border)]">·</span>
               <span className="text-xs text-[var(--color-subtle)]">
-                {index + 1} / {SNIPPETS.length}
+                {index + 1} / {snippets.length}
               </span>
             </div>
             <h3 className="mt-1 text-base font-semibold text-[var(--color-ink)]">{active.title}</h3>
@@ -206,7 +257,7 @@ export function CodeExplorer() {
                 <span className="h-2.5 w-2.5 rounded-full bg-[#febc2e]" />
                 <span className="h-2.5 w-2.5 rounded-full bg-[#28c840]" />
               </div>
-              <span className="flex min-w-0 items-center gap-1.5 border-b-2 border-[var(--color-accent)] py-2.5 font-mono text-xs text-slate-200">
+              <span className={`flex min-w-0 items-center gap-1.5 border-b-2 py-2.5 font-mono text-xs text-slate-200 ${theme.tabUnderline}`}>
                 <FileIcon className="h-3.5 w-3.5 shrink-0 text-slate-400" />
                 <span className="truncate">{tabLabel(active)}</span>
               </span>
@@ -256,8 +307,8 @@ export function CodeExplorer() {
 
         {/* Walk the integration end to end */}
         <div className="flex items-stretch justify-between gap-3">
-          <StepButton dir="left" snippet={prev} onSelect={setActiveId} />
-          <StepButton dir="right" snippet={next} onSelect={setActiveId} />
+          <StepButton dir="left" snippet={prev} onSelect={setActiveId} theme={theme} />
+          <StepButton dir="right" snippet={next} onSelect={setActiveId} theme={theme} />
         </div>
       </div>
     </div>
@@ -268,23 +319,25 @@ function StepButton({
   dir,
   snippet,
   onSelect,
+  theme,
 }: {
   dir: 'left' | 'right'
   snippet: CodeSnippet | null
   onSelect: (id: string) => void
+  theme: (typeof ACCENT)[Accent]
 }) {
   if (!snippet) return <span className="flex-1" />
   const alignRight = dir === 'right'
   return (
     <button
       onClick={() => onSelect(snippet.id)}
-      className={`group flex flex-1 items-center gap-2 rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] px-3 py-2.5 text-sm shadow-elevate-sm transition hover:border-[var(--color-accent)]/40 hover:text-[var(--color-ink)] ${
+      className={`group flex flex-1 items-center gap-2 rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] px-3 py-2.5 text-sm shadow-elevate-sm transition hover:text-[var(--color-ink)] ${theme.stepperHover} ${
         alignRight ? 'flex-row-reverse text-right' : 'text-left'
       }`}
     >
       <ChevronIcon
         dir={dir}
-        className={`h-4 w-4 shrink-0 text-[var(--color-subtle)] transition group-hover:text-[var(--color-accent)] ${
+        className={`h-4 w-4 shrink-0 text-[var(--color-subtle)] transition ${theme.chevronHover} ${
           alignRight ? 'group-hover:translate-x-0.5' : 'group-hover:-translate-x-0.5'
         }`}
       />
