@@ -23,7 +23,13 @@ const AUTH_METHOD_LABEL: Record<'env-token' | 'client-credentials', string> = {
 }
 
 function StatusDot({ ok }: { ok: boolean }) {
-  return <span className={`h-2 w-2 shrink-0 rounded-full ${ok ? 'bg-emerald-500' : 'bg-amber-500'}`} />
+  return (
+    <span
+      className={`h-2 w-2 shrink-0 rounded-full ${
+        ok ? 'bg-emerald-500 shadow-[0_0_0_3px_rgba(16,185,129,0.18)]' : 'bg-amber-500 shadow-[0_0_0_3px_rgba(245,158,11,0.18)]'
+      }`}
+    />
+  )
 }
 
 function Row({ ok, label, children }: { ok: boolean; label: string; children: React.ReactNode }) {
@@ -65,13 +71,19 @@ export function ConnectionPanel({ product = 'verification' }: { product?: string
   }
 
   return (
-    <section className="rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-5 shadow-sm">
+    <section className="rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] p-5 shadow-elevate-sm">
       <div className="flex items-center justify-between">
-        <h2 className="text-sm font-semibold text-[var(--color-ink)]">Setup status</h2>
+        <div className="flex items-center gap-2">
+          <span className="flex h-6 w-6 items-center justify-center rounded-md bg-[var(--color-accent-soft)] text-[var(--color-accent-strong)] ring-1 ring-[var(--color-accent)]/20">
+            <Icon name="bolt" className="h-3.5 w-3.5" />
+          </span>
+          <h2 className="text-sm font-semibold text-[var(--color-ink)]">Setup status</h2>
+        </div>
         <button
           onClick={refresh}
-          className="rounded-md px-2 py-1 text-xs text-[var(--color-muted)] ring-1 ring-[var(--color-border)] transition hover:bg-[var(--color-surface-2)] hover:text-[var(--color-ink)]"
+          className="inline-flex items-center gap-1.5 rounded-md px-2.5 py-1 text-xs text-[var(--color-muted)] ring-1 ring-[var(--color-border)] transition hover:bg-[var(--color-surface-2)] hover:text-[var(--color-ink)]"
         >
+          {loading ? <span className="h-3 w-3 animate-spin rounded-full border-[1.5px] border-[var(--color-subtle)] border-t-transparent" /> : null}
           {loading ? 'Checking…' : 'Re-check'}
         </button>
       </div>

@@ -39,8 +39,12 @@ function EventCard({ rec, isNew }: { rec: WebhookRecord; isNew: boolean }) {
   const time = new Date(rec.receivedAt).toLocaleTimeString()
 
   return (
-    <div className={`rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] shadow-sm ${isNew ? 'animate-flash' : ''}`}>
-      <button onClick={() => setOpen((o) => !o)} className="flex w-full items-start justify-between gap-3 p-3 text-left">
+    <div className={`overflow-hidden rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] shadow-elevate-sm transition hover:border-[var(--color-accent)]/30 ${isNew ? 'animate-flash' : ''}`}>
+      <button
+        onClick={() => setOpen((o) => !o)}
+        aria-expanded={open}
+        className="flex w-full items-start justify-between gap-3 p-3 text-left"
+      >
         <div className="min-w-0 space-y-1.5">
           <div className="flex flex-wrap items-center gap-2">
             <span className={`rounded-md px-2 py-0.5 font-mono text-xs ring-1 ${badge}`}>{eventType}</span>
@@ -56,7 +60,20 @@ function EventCard({ rec, isNew }: { rec: WebhookRecord; isNew: boolean }) {
             {rec.headers.externalSearchId ? <span className="font-mono">ext: {rec.headers.externalSearchId}</span> : null}
           </div>
         </div>
-        <span className="shrink-0 text-xs text-[var(--color-subtle)]">{open ? 'Hide' : 'View'}</span>
+        <span className="inline-flex shrink-0 items-center gap-1 rounded-md bg-[var(--color-surface-2)] px-2 py-0.5 text-xs text-[var(--color-muted)] ring-1 ring-[var(--color-border)]">
+          {open ? 'Hide' : 'View'}
+          <svg
+            className={`h-3 w-3 transition-transform ${open ? 'rotate-180' : ''}`}
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path d="m6 9 6 6 6-6" />
+          </svg>
+        </span>
       </button>
       {open ? (
         <div className="border-t border-[var(--color-border)] p-3">
@@ -103,12 +120,15 @@ export function WebhookFeed({ product = 'verification' }: { product?: string }) 
   }
 
   return (
-    <div className="flex h-full flex-col rounded-xl border border-[var(--color-border)] bg-[var(--color-surface-2)]/60 p-4">
+    <div className="flex h-full flex-col rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface-2)]/50 p-4 shadow-elevate-sm">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <span className={`h-2 w-2 rounded-full ${live ? 'animate-pulse bg-emerald-500' : 'bg-[var(--color-subtle)]'}`} />
+          <span className="relative flex h-2.5 w-2.5">
+            {live ? <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-500 opacity-75" /> : null}
+            <span className={`relative inline-flex h-2.5 w-2.5 rounded-full ${live ? 'bg-emerald-500' : 'bg-[var(--color-subtle)]'}`} />
+          </span>
           <h2 className="text-sm font-semibold text-[var(--color-ink)]">Live webhooks</h2>
-          <span className="rounded-full bg-[var(--color-surface)] px-2 py-0.5 text-xs text-[var(--color-muted)] ring-1 ring-[var(--color-border)]">
+          <span className="rounded-full bg-[var(--color-surface)] px-2 py-0.5 text-xs font-medium text-[var(--color-muted)] ring-1 ring-[var(--color-border)]">
             {events.length}
           </span>
         </div>

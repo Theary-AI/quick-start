@@ -2,13 +2,15 @@
 
 @theme {
   /* Brand palette — mirrors the SNH AI marketing site (snh-ai.com) */
-  --color-canvas: #f9fafb; /* page background (gray-50) */
+  --color-canvas: #f7f8fa; /* page background */
   --color-surface: #ffffff; /* cards / panels */
   --color-surface-2: #f3f4f6; /* subtle fills (gray-100) */
-  --color-border: #e5e7eb; /* hairlines (gray-200) */
-  --color-code: #f6f7f9; /* code / JSON blocks */
+  --color-border: #e6e8ec; /* hairlines */
+  --color-code: #f6f7f9; /* editable code fields (light) */
+  --color-slab: #0f1729; /* read-only JSON slab (dark) */
+  --color-slab-ink: #e2e8f0; /* text on the dark slab */
 
-  --color-ink: #111827; /* headings (gray-900) */
+  --color-ink: #0b1220; /* headings */
   --color-body: #374151; /* body copy (gray-700) */
   --color-muted: #6b7280; /* secondary text (gray-500) */
   --color-subtle: #9ca3af; /* tertiary text (gray-400) */
@@ -23,6 +25,20 @@
 
 :root {
   color-scheme: light;
+
+  /* RGB channels for alpha compositing */
+  --accent-rgb: 139 92 246;
+  --accent-indigo-rgb: 99 102 241;
+
+  /* Brand gradients */
+  --gradient-brand: linear-gradient(115deg, #7c3aed 0%, #6366f1 55%, #8b5cf6 100%);
+  --gradient-brand-soft: linear-gradient(115deg, rgba(124, 58, 237, 0.12), rgba(99, 102, 241, 0.1));
+
+  /* Layered elevation — soft, slightly tinted shadows */
+  --elevate-sm: 0 1px 2px rgba(15, 23, 42, 0.04), 0 1px 3px rgba(15, 23, 42, 0.06);
+  --elevate-md: 0 4px 12px -2px rgba(15, 23, 42, 0.08), 0 2px 6px -2px rgba(15, 23, 42, 0.05);
+  --elevate-lg: 0 18px 40px -12px rgba(15, 23, 42, 0.16), 0 8px 16px -8px rgba(15, 23, 42, 0.08);
+  --elevate-accent: 0 12px 30px -10px rgba(var(--accent-rgb) / 0.45);
 }
 
 html,
@@ -50,17 +66,106 @@ h6 {
   border-color: var(--color-border);
 }
 
+/* Consistent, accessible focus ring for keyboard users */
+:focus-visible {
+  outline: 2px solid rgba(var(--accent-rgb) / 0.55);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
 /* Thin, subtle scrollbars for the event feed / code blocks */
 .scroll-thin::-webkit-scrollbar {
   width: 8px;
   height: 8px;
 }
 .scroll-thin::-webkit-scrollbar-thumb {
-  background: #d1d5db;
+  background: #cbd0d8;
   border-radius: 9999px;
 }
 .scroll-thin::-webkit-scrollbar-track {
   background: transparent;
+}
+
+/* ------------------------------------------------------------------ */
+/* Elevation helpers                                                   */
+/* ------------------------------------------------------------------ */
+.shadow-elevate-sm {
+  box-shadow: var(--elevate-sm);
+}
+.shadow-elevate-md {
+  box-shadow: var(--elevate-md);
+}
+.shadow-elevate-lg {
+  box-shadow: var(--elevate-lg);
+}
+
+/* Card that lifts on hover */
+.card-lift {
+  transition:
+    transform 0.25s cubic-bezier(0.22, 0.61, 0.36, 1),
+    box-shadow 0.25s cubic-bezier(0.22, 0.61, 0.36, 1),
+    border-color 0.25s ease;
+  will-change: transform;
+}
+.card-lift:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--elevate-lg);
+}
+
+/* ------------------------------------------------------------------ */
+/* Brand gradient text + accents                                       */
+/* ------------------------------------------------------------------ */
+.text-gradient {
+  background: var(--gradient-brand);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* ------------------------------------------------------------------ */
+/* Decorative backgrounds                                              */
+/* ------------------------------------------------------------------ */
+
+/* Faint grid, fading out toward the edges — used behind the hero */
+.bg-grid {
+  background-image:
+    linear-gradient(to right, rgba(15, 23, 42, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(15, 23, 42, 0.05) 1px, transparent 1px);
+  background-size: 44px 44px;
+  -webkit-mask-image: radial-gradient(ellipse 80% 70% at 50% 0%, #000 40%, transparent 80%);
+  mask-image: radial-gradient(ellipse 80% 70% at 50% 0%, #000 40%, transparent 80%);
+}
+
+/* Soft, drifting aurora blobs */
+.aurora {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(60px);
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+/* ------------------------------------------------------------------ */
+/* Motion                                                              */
+/* ------------------------------------------------------------------ */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }
 
 @keyframes flash-in {
@@ -71,6 +176,66 @@ h6 {
     background-color: transparent;
   }
 }
+
+@keyframes aurora-drift {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(4%, -6%, 0) scale(1.12);
+  }
+}
+
+@keyframes shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
 .animate-flash {
   animation: flash-in 1.2s ease-out;
+}
+
+.animate-rise {
+  animation: rise-in 0.6s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+
+.animate-fade {
+  animation: fade-in 0.8s ease both;
+}
+
+.animate-aurora {
+  animation: aurora-drift 16s ease-in-out infinite;
+}
+
+/* Shimmering border sweep for the primary CTA */
+.btn-shine {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+.btn-shine::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.35), transparent);
+  z-index: 1;
+}
+.btn-shine:hover::after {
+  animation: shimmer 0.9s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+  .card-lift:hover {
+    transform: none;
+  }
 }

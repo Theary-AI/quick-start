@@ -26,28 +26,42 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`${inter.variable} ${ibmPlexMono.variable}`}>
-      <body className="min-h-screen antialiased">
-        <header className="sticky top-0 z-20 border-b border-[var(--color-border)] bg-[var(--color-canvas)]/80 backdrop-blur">
-          <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
-            <Link href="/" className="flex items-center gap-2.5">
-              <Image src="/snh-logo.png" alt="SNH AI" width={28} height={28} className="h-7 w-7" priority />
+      <body className="flex min-h-screen flex-col antialiased">
+        <header className="sticky top-0 z-30 border-b border-[var(--color-border)]/80 bg-[var(--color-canvas)]/70 backdrop-blur-xl">
+          <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-3.5">
+            <Link href="/" className="group flex items-center gap-2.5">
+              <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-[var(--color-ink)] shadow-elevate-sm ring-1 ring-black/5 transition group-hover:scale-105">
+                <Image src="/snh-logo-white.png" alt="SNH AI" width={18} height={18} className="h-[18px] w-[18px]" priority />
+              </span>
               <span className="text-sm font-semibold tracking-tight text-[var(--color-ink)]">SNH AI</span>
-              <span className="text-sm text-[var(--color-muted)]">Integration Quickstart</span>
+              <span className="hidden h-4 w-px bg-[var(--color-border)] sm:block" />
+              <span className="hidden text-sm font-light text-[var(--color-muted)] sm:block">Integration Quickstart</span>
             </Link>
             <a
               href="https://api.theary.ai/docs"
               target="_blank"
               rel="noreferrer"
-              className="text-sm text-[var(--color-muted)] transition hover:text-[var(--color-ink)]"
+              className="inline-flex items-center gap-1.5 rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] px-3 py-1.5 text-sm font-medium text-[var(--color-body)] shadow-elevate-sm transition hover:border-[var(--color-accent)]/40 hover:text-[var(--color-ink)]"
             >
-              API Docs ↗
+              API Docs
+              <span aria-hidden className="text-[var(--color-subtle)]">↗</span>
             </a>
           </div>
         </header>
-        <main className="mx-auto max-w-6xl px-6 py-10">{children}</main>
-        <footer className="mx-auto max-w-6xl px-6 py-10 text-xs text-[var(--color-subtle)]">
-          This is a demo integration. Keep your JWT and webhook secret in{' '}
-          <code className="font-mono text-[var(--color-muted)]">.env.local</code> — they never leave the server.
+        <main className="mx-auto w-full max-w-6xl flex-1 px-6 py-12">{children}</main>
+        <footer className="border-t border-[var(--color-border)] bg-[var(--color-surface)]/60">
+          <div className="mx-auto flex max-w-6xl flex-col gap-3 px-6 py-8 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex items-center gap-2.5">
+              <span className="flex h-6 w-6 items-center justify-center rounded-md bg-[var(--color-ink)]">
+                <Image src="/snh-logo-white.png" alt="" width={13} height={13} className="h-[13px] w-[13px]" />
+              </span>
+              <span className="text-xs text-[var(--color-muted)]">SNH AI — Integration Quickstart</span>
+            </div>
+            <p className="text-xs text-[var(--color-subtle)]">
+              Demo integration. Keep your JWT &amp; webhook secret in{' '}
+              <code className="font-mono text-[var(--color-muted)]">.env.local</code> — they never leave the server.
+            </p>
+          </div>
         </footer>
       </body>
     </html>

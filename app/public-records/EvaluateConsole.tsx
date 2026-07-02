@@ -176,13 +176,19 @@ function Section({ title, children }: { title: string; children: React.ReactNode
 function SetupStatus({ data, loading, onRefresh }: { data: ConfigResponse | null; loading: boolean; onRefresh: () => void }) {
   const c = data?.config
   return (
-    <section className="rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-5 shadow-sm">
+    <section className="rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] p-5 shadow-elevate-sm">
       <div className="flex items-center justify-between">
-        <h2 className="text-sm font-semibold text-[var(--color-ink)]">Setup status</h2>
+        <div className="flex items-center gap-2">
+          <span className="flex h-6 w-6 items-center justify-center rounded-md bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200">
+            <Icon name="bolt" className="h-3.5 w-3.5" />
+          </span>
+          <h2 className="text-sm font-semibold text-[var(--color-ink)]">Setup status</h2>
+        </div>
         <button
           onClick={onRefresh}
-          className="rounded-md px-2 py-1 text-xs text-[var(--color-muted)] ring-1 ring-[var(--color-border)] transition hover:bg-[var(--color-surface-2)] hover:text-[var(--color-ink)]"
+          className="inline-flex items-center gap-1.5 rounded-md px-2.5 py-1 text-xs text-[var(--color-muted)] ring-1 ring-[var(--color-border)] transition hover:bg-[var(--color-surface-2)] hover:text-[var(--color-ink)]"
         >
+          {loading ? <span className="h-3 w-3 animate-spin rounded-full border-[1.5px] border-[var(--color-subtle)] border-t-transparent" /> : null}
           {loading ? 'Checking…' : 'Re-check'}
         </button>
       </div>
@@ -190,7 +196,11 @@ function SetupStatus({ data, loading, onRefresh }: { data: ConfigResponse | null
       <div className="mt-2 divide-y divide-[var(--color-border)]">
         <div className="flex items-center justify-between gap-4 py-2.5">
           <div className="flex items-center gap-2.5">
-            <span className={`h-2 w-2 shrink-0 rounded-full ${data?.health.ok ? 'bg-emerald-500' : 'bg-amber-500'}`} />
+            <span
+              className={`h-2 w-2 shrink-0 rounded-full ${
+                data?.health.ok ? 'bg-emerald-500 shadow-[0_0_0_3px_rgba(16,185,129,0.18)]' : 'bg-amber-500 shadow-[0_0_0_3px_rgba(245,158,11,0.18)]'
+              }`}
+            />
             <span className="text-sm text-[var(--color-body)]">API reachable</span>
           </div>
           <span className="font-mono text-xs text-[var(--color-muted)]">{c?.apiBaseUrl}</span>
@@ -198,7 +208,11 @@ function SetupStatus({ data, loading, onRefresh }: { data: ConfigResponse | null
 
         <div className="flex items-center justify-between gap-4 py-2.5">
           <div className="flex items-center gap-2.5">
-            <span className={`h-2 w-2 shrink-0 rounded-full ${c?.hasCredentials && c?.authMethod ? 'bg-emerald-500' : 'bg-amber-500'}`} />
+            <span
+              className={`h-2 w-2 shrink-0 rounded-full ${
+                c?.hasCredentials && c?.authMethod ? 'bg-emerald-500 shadow-[0_0_0_3px_rgba(16,185,129,0.18)]' : 'bg-amber-500 shadow-[0_0_0_3px_rgba(245,158,11,0.18)]'
+              }`}
+            />
             <span className="text-sm text-[var(--color-body)]">Authentication</span>
           </div>
           <div className="text-right text-sm text-[var(--color-muted)]">
@@ -336,10 +350,13 @@ export function EvaluateConsole() {
 
       <div className="grid gap-6 lg:grid-cols-2">
         {/* Left: record form */}
-        <div className="space-y-5 rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-5 shadow-sm">
+        <div className="space-y-5 rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] p-6 shadow-elevate-sm">
           <div className="flex items-center justify-between">
             <h2 className="text-sm font-semibold text-[var(--color-ink)]">Evaluate a public record</h2>
-            <button onClick={reset} className="text-xs text-[var(--color-muted)] transition hover:text-[var(--color-ink)]">
+            <button
+              onClick={reset}
+              className="rounded-md px-2 py-1 text-xs text-[var(--color-muted)] ring-1 ring-[var(--color-border)] transition hover:bg-[var(--color-surface-2)] hover:text-[var(--color-ink)]"
+            >
               Reset sample
             </button>
           </div>
@@ -430,9 +447,13 @@ export function EvaluateConsole() {
               onClick={submit}
               disabled={submitting || !hasCredentials}
               title={!hasCredentials ? 'Configure PUBLIC_RECORDS_API_KEY first' : 'Cmd/Ctrl + Enter'}
-              className="flex w-full items-center justify-center gap-2 rounded-lg bg-emerald-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-700 disabled:cursor-not-allowed disabled:opacity-60"
+              className="btn-shine flex w-full items-center justify-center gap-2 rounded-lg bg-[linear-gradient(135deg,#10b981,#14b8a6)] px-4 py-2.5 text-sm font-semibold text-white shadow-[0_12px_30px_-10px_rgba(16,185,129,0.5)] transition hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-60"
             >
-              <Icon name="bolt" className="h-4 w-4" />
+              {submitting ? (
+                <span className="h-4 w-4 animate-spin rounded-full border-2 border-white/40 border-t-white" />
+              ) : (
+                <Icon name="bolt" className="h-4 w-4" />
+              )}
               {submitting ? 'Evaluating…' : 'Evaluate record'}
             </button>
 
@@ -444,7 +465,7 @@ export function EvaluateConsole() {
         </div>
 
         {/* Right: decision */}
-        <div className="rounded-xl border border-[var(--color-border)] bg-[var(--color-surface-2)]/60 p-4">
+        <div className="rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface-2)]/50 p-4 shadow-elevate-sm">
           {submitting ? <LoadingState /> : result ? <ResultPanel result={result} /> : <EmptyState />}
         </div>
       </div>

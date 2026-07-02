@@ -109,10 +109,13 @@ export function OrderConsole() {
   return (
     <div className="grid gap-6 lg:grid-cols-2">
       {/* Left: order form */}
-      <div className="space-y-5 rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-5 shadow-sm">
+      <div className="space-y-5 rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] p-6 shadow-elevate-sm">
         <div className="flex items-center justify-between">
           <h2 className="text-sm font-semibold text-[var(--color-ink)]">Create an employment verification order</h2>
-          <button onClick={reset} className="text-xs text-[var(--color-muted)] transition hover:text-[var(--color-ink)]">
+          <button
+            onClick={reset}
+            className="rounded-md px-2 py-1 text-xs text-[var(--color-muted)] ring-1 ring-[var(--color-border)] transition hover:bg-[var(--color-surface-2)] hover:text-[var(--color-ink)]"
+          >
             Reset sample
           </button>
         </div>
@@ -164,9 +167,13 @@ export function OrderConsole() {
           <button
             onClick={submit}
             disabled={submitting}
-            className="flex w-full items-center justify-center gap-2 rounded-lg bg-[var(--color-accent)] px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-[var(--color-accent-strong)] disabled:cursor-not-allowed disabled:opacity-60"
+            className="btn-shine flex w-full items-center justify-center gap-2 rounded-lg bg-[image:var(--gradient-brand)] px-4 py-2.5 text-sm font-semibold text-white shadow-[var(--elevate-accent)] transition hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-60"
           >
-            <Icon name="bolt" className="h-4 w-4" />
+            {submitting ? (
+              <span className="h-4 w-4 animate-spin rounded-full border-2 border-white/40 border-t-white" />
+            ) : (
+              <Icon name="bolt" className="h-4 w-4" />
+            )}
             {submitting ? 'Submitting…' : 'Submit verification order'}
           </button>
 
