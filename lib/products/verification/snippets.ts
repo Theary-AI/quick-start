@@ -114,7 +114,16 @@ export async function createVerificationOrder(publicBaseUrl: string) {
       {
         searchType: 'EMPLOYMENT', // or 'EDUCATION'
         externalSearchId: 'quickstart-emp-001', // your own tracking id (echoed back)
-        searchConfig: { notifications: { webhookOverride: webhookConfig } },
+        searchConfig: {
+          notifications: { webhookOverride: webhookConfig },
+          // Non-production only: redirect ALL outbound for this search to your own
+          // test destinations (email -> EMAIL, phone -> VOICE, fax -> FAX) instead
+          // of the real employer. Ignored in production. Omit to use real contacts.
+          qaDestinations: {
+            email: 'qa-inbox@example.com',
+            phone: '+1-555-000-0000',
+          },
+        },
       },
     ],
     applicant: {

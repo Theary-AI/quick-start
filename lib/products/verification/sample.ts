@@ -1,4 +1,4 @@
-import type { VerificationFormInput, VerificationOrderRequest, WebhookConfig } from './types'
+import type { SearchConfig, VerificationFormInput, VerificationOrderRequest, WebhookConfig } from './types'
 
 /** Sensible, editable defaults so a client can submit in one click. */
 export const SAMPLE_FORM: VerificationFormInput = {
@@ -27,6 +27,13 @@ export const SAMPLE_FORM: VerificationFormInput = {
     startDate: '2020-01-15',
     endDate: '2023-06-30',
   },
+  // Non-production QA overrides: redirect all outbound to your own test inbox /
+  // number instead of the real employer. Leave a field blank to skip it.
+  qaDestinations: {
+    email: 'qa-inbox@example.com',
+    phone: '+1-555-000-0000',
+    fax: '',
+  },
 }
 
 function clean<T extends object>(obj: T): T {
@@ -43,15 +50,28 @@ function clean<T extends object>(obj: T): T {
  * supplied separately by the server (it carries the secret + tunnel URL).
  */
 export function buildOrderRequest(form: VerificationFormInput, webhookConfig?: WebhookConfig): VerificationOrderRequest {
+  // Compose the per-search config from the pieces the caller opted into.
+  const qaDestinations = clean({
+    email: form.qaDestinations?.email,
+    phone: form.qaDestinations?.phone,
+    fax: form.qaDestinations?.fax,
+  })
+  const searchConfig: SearchConfig = {
+    // The top-level webhookConfig only routes verification.completed. To also
+    // receive notification and action_required events at our endpoint, mirror
+    // the same config into the per-search notifications.webhookOverride.
+    ...(webhookConfig ? { notifications: { webhookOverride: webhookConfig } } : {}),
+    // Non-production only: redirect outbound to the supplied QA destinations.
+    ...(Object.keys(qaDestinations).length > 0 ? { qaDestinations } : {}),
+  }
+  const hasSearchConfig = Object.keys(searchConfig).length > 0
+
   return {
     searchTypes: [
       {
         searchType: 'EMPLOYMENT',
         ...(form.externalSearchId ? { externalSearchId: form.externalSearchId } : {}),
-        // The top-level webhookConfig only routes verification.completed. To also
-        // receive notification and action_required events at our endpoint, mirror
-        // the same config into the per-search notifications.webhookOverride.
-        ...(webhookConfig ? { searchConfig: { notifications: { webhookOverride: webhookConfig } } } : {}),
+        ...(hasSearchConfig ? { searchConfig } : {}),
       },
     ],
     applicant: clean({

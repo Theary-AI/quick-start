@@ -33,12 +33,25 @@ export interface EmploymentHistoryInput {
   endDate?: string
 }
 
+/**
+ * Per-search QA destination overrides. Outside production the platform redirects
+ * ALL outbound email / voice / fax for the search to these test destinations
+ * instead of the real (or tenant-level QA) contacts — handy for exercising the
+ * full outbound flow without contacting a real employer. Ignored in production.
+ */
+export interface QaDestinationsInput {
+  email?: string
+  phone?: string
+  fax?: string
+}
+
 /** The flat shape collected by the order form in the UI. */
 export interface VerificationFormInput {
   externalSearchId: string
   applicant: ApplicantInput
   businessContext: BusinessContextInput
   employment: EmploymentHistoryInput
+  qaDestinations: QaDestinationsInput
 }
 
 /** Webhook event types delivered by the platform. */
@@ -76,6 +89,13 @@ export interface SearchConfig {
   notifications?: {
     webhookOverride?: WebhookConfig
   }
+  /**
+   * Non-production only. When set, every outbound attempt for this search is
+   * redirected to these test destinations rather than the real contacts. Each
+   * key maps to a channel: `email` → EMAIL, `phone` → VOICE, `fax` → FAX.
+   * In production these are ignored and the researched destinations are used.
+   */
+  qaDestinations?: QaDestinationsInput
 }
 
 /** The request body sent to the platform. */

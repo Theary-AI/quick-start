@@ -12,6 +12,7 @@ type FieldPath =
   | `applicant.${keyof VerificationFormInput['applicant']}`
   | `businessContext.${keyof VerificationFormInput['businessContext']}`
   | `employment.${keyof VerificationFormInput['employment']}`
+  | `qaDestinations.${keyof VerificationFormInput['qaDestinations']}`
 
 interface OrderResult {
   ok: boolean
@@ -161,6 +162,34 @@ export function OrderConsole() {
 
         <Section title="Tracking">
           <Field label="Your external search ID" value={form.externalSearchId} onChange={(v) => set('externalSearchId', v)} placeholder="quickstart-emp-001" />
+        </Section>
+
+        <Section title="QA destinations (non-production)">
+          <p className="text-xs text-[var(--color-muted)]">
+            Redirect all outbound for this search to your own test destinations instead of the real employer. Leave blank to use
+            the researched contacts. Ignored in production.
+          </p>
+          <Field
+            label="QA email"
+            type="email"
+            value={form.qaDestinations.email ?? ''}
+            onChange={(v) => set('qaDestinations.email', v)}
+            placeholder="qa-inbox@example.com"
+          />
+          <div className="grid grid-cols-2 gap-3">
+            <Field
+              label="QA phone (voice)"
+              value={form.qaDestinations.phone ?? ''}
+              onChange={(v) => set('qaDestinations.phone', v)}
+              placeholder="+1-555-000-0000"
+            />
+            <Field
+              label="QA fax"
+              value={form.qaDestinations.fax ?? ''}
+              onChange={(v) => set('qaDestinations.fax', v)}
+              placeholder="+1-555-000-0001"
+            />
+          </div>
         </Section>
 
         <div className="space-y-3 pt-1">
