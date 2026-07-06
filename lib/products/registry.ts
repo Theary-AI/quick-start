@@ -40,7 +40,7 @@ export const PRODUCTS: ProductMeta[] = [
     accent: 'violet',
     icon: 'shield-check',
     capabilities: ['Employment verification', 'Education verification', 'Real-time webhooks', 'Accreditation data'],
-    docsUrl: 'https://api.theary.ai/docs',
+    docsUrl: 'https://documentation.theary.ai',
   },
   {
     slug: 'public-records',

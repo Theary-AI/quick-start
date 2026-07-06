@@ -38,7 +38,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               <span className="hidden text-sm font-light text-[var(--color-muted)] sm:block">Integration Quickstart</span>
             </Link>
             <a
-              href="https://api.theary.ai/docs"
+              href="https://documentation.theary.ai"
               target="_blank"
               rel="noreferrer"
               className="inline-flex items-center gap-1.5 rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] px-3 py-1.5 text-sm font-medium text-[var(--color-body)] shadow-elevate-sm transition hover:border-[var(--color-accent)]/40 hover:text-[var(--color-ink)]"

@@ -55,7 +55,7 @@ export default function HomePage() {
               Explore products
             </a>
             <a
-              href="https://api.theary.ai/docs"
+              href="https://documentation.theary.ai"
               target="_blank"
               rel="noreferrer"
               className="inline-flex items-center gap-1.5 rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] px-5 py-2.5 text-sm font-medium text-[var(--color-body)] transition hover:border-[var(--color-accent)]/40 hover:text-[var(--color-ink)]"
