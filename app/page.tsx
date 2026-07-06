@@ -39,7 +39,7 @@ export default function HomePage() {
           </span>
 
           <h1 className="animate-rise mt-5 text-4xl font-semibold leading-[1.08] tracking-tight text-[var(--color-ink)] sm:text-5xl" style={{ animationDelay: '60ms' }}>
-            Kick the tires on the <span className="text-gradient">SNH AI platform</span>
+            Explore CRA digital employees by <span className="text-gradient">SNH AI</span>
           </h1>
 
           <p className="animate-rise mt-5 max-w-xl text-base font-light leading-relaxed text-[var(--color-muted)] sm:text-lg" style={{ animationDelay: '120ms' }}>
