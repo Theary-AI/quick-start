@@ -13,7 +13,7 @@ interface ConfigResponse {
     tokenTenant: string | null
     tokenWarning: string | null
   }
-  tunnel: { publicBaseUrl: string | null; source: 'env' | 'ngrok' | null; webhookUrl: string | null }
+  tunnel: { publicBaseUrl: string | null; source: 'env' | 'ngrok' | 'request' | null; webhookUrl: string | null }
   health: { ok: boolean; status: number; body?: unknown; error?: string }
 }
 

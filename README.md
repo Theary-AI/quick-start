@@ -37,6 +37,30 @@ See [`apps/verification-api/node/README.md`](apps/verification-api/node/README.m
 for the full walkthrough (health check → create order → track searches →
 receive signed webhooks over ngrok).
 
+## Deploying
+
+Prefer a hosted demo over a local ngrok tunnel? The app is fully containerized
+and can run anywhere that runs a container.
+
+```bash
+# Build & run locally
+docker build -t snh-ai-quickstart .
+docker run --rm -p 8080:8080 --env-file .env.local snh-ai-quickstart
+
+# Or deploy to your own Google Cloud Run project
+gcloud auth login && gcloud config set project YOUR_PROJECT_ID
+./deploy/cloud-run.sh
+```
+
+When hosted behind a TLS-terminating proxy (like Cloud Run) the app
+auto-detects its own public URL and configures webhooks automatically — no
+ngrok, and no need to set `PUBLIC_BASE_URL`. This repo ships **no**
+deploy-specific config or secrets; you deploy into your own infrastructure and
+provide credentials at runtime.
+
+See [`DEPLOY.md`](DEPLOY.md) for the full guide (Docker, Cloud Run, Secret
+Manager, and limitations).
+
 ## Adding a new quickstart
 
 1. Create `apps/<api>/<stack>/`.

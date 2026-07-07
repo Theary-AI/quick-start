@@ -14,7 +14,7 @@ export async function GET(request: Request) {
   const product = searchParams.get('product') ?? 'verification'
 
   const config = await getPublicConfigStatus()
-  const tunnel = await resolvePublicBaseUrl()
+  const tunnel = await resolvePublicBaseUrl(request)
   const health = await checkApiHealth()
 
   return NextResponse.json({

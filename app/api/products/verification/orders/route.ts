@@ -18,7 +18,7 @@ export async function POST(request: Request) {
   const env = getServerEnv()
   const form = (await request.json()) as VerificationFormInput
 
-  const tunnel = await resolvePublicBaseUrl()
+  const tunnel = await resolvePublicBaseUrl(request)
 
   let webhookConfig: WebhookConfig | undefined
   let webhookNote: string | null = null
