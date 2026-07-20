@@ -11,6 +11,6 @@
       "date_of_birth": "1995-11-02",
       "address": "200 Oak St, Charlotte, NC 28202"
     },
-    "xml": "<ScreeningResults><postResults filledStatus=\"filled\" order=\"90010003\" type=\"USA_CRIMINAL\" filledCode=\"hits\"><case><case_number>2022D 706536</case_number><filing_date>08/10/2022</filing_date><jurisdiction_state>NC</jurisdiction_state><jurisdiction>Mecklenburg</jurisdiction><defendant><name_first>Bryanna</name_first><name_last>Carr</name_last><dob>11/2/1995</dob></defendant><chargeinfo><charge>Not Specified</charge><crime_type/><disposition/><filing_date_freeformat>08/10/2022</filing_date_freeformat></chargeinfo></case></postResults></ScreeningResults>"
+    "xml": "<ScreeningResults><postResults filledStatus=\"filled\" order=\"90010003\" subOrder=\"90010003.1\" type=\"USA_CRIMINAL\" filledCode=\"hits\"><case><case_number>2022D 706536</case_number><filing_date>08/10/2022</filing_date><jurisdiction_state>NC</jurisdiction_state><jurisdiction>Mecklenburg</jurisdiction><defendant><name_first>Bryanna</name_first><name_last>Carr</name_last><dob>11/2/1995</dob></defendant><chargeinfo><charge>Not Specified</charge><crime_type/><disposition/><filing_date_freeformat>08/10/2022</filing_date_freeformat></chargeinfo></case></postResults></ScreeningResults>"
   }
 }

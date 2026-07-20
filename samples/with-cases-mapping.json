@@ -5,6 +5,7 @@
     "order_id": "90010001",
     "order_number": "90010001.1",
     "applicant_state": "TX",
+    "search_type": "USA_CRIMINAL_PLUS",
     "candidate_info": {
       "first_name": "Ebony",
       "last_name": "Ferrell",
@@ -19,6 +20,6 @@
         "is_excluded": false
       }
     ],
-    "xml": "<ScreeningResults><postResults filledStatus=\"filled\" order=\"90010001\" type=\"USA_CRIMINAL_PLUS\" filledCode=\"hits\"><case><case_number>TR-2020-00412</case_number><filing_date>01/15/2020</filing_date><disposition_date>03/01/2020</disposition_date><jurisdiction_state>TX</jurisdiction_state><jurisdiction>Travis</jurisdiction><defendant><name_first>Ebony</name_first><name_last>Ferrell</name_last><dob>8/12/1992</dob><ssn>123456789</ssn><address><address>100 Main St</address><city>Austin</city><state>TX</state><zip>78701</zip></address></defendant><chargeinfo><charge>SPEEDING 15MPH OR MORE (ST RD)</charge><crime_type>TRAFFIC</crime_type><disposition>DISMISSED</disposition><disposition_date_freeformat>03/01/2020</disposition_date_freeformat><filing_date_freeformat>01/15/2020</filing_date_freeformat></chargeinfo></case></postResults></ScreeningResults>"
+    "xml": "<ScreeningResults><postResults filledStatus=\"filled\" order=\"90010001\" subOrder=\"90010001.1\" type=\"USA_CRIMINAL_PLUS\" filledCode=\"hits\"><case><case_number>TR-2020-00412</case_number><filing_date>01/15/2020</filing_date><disposition_date>03/01/2020</disposition_date><jurisdiction_state>TX</jurisdiction_state><jurisdiction>Travis</jurisdiction><defendant><name_first>Ebony</name_first><name_last>Ferrell</name_last><dob>8/12/1992</dob><ssn>123456789</ssn><address><address>100 Main St</address><city>Austin</city><state>TX</state><zip>78701</zip></address></defendant><chargeinfo><charge>SPEEDING 15MPH OR MORE (ST RD)</charge><crime_type>TRAFFIC</crime_type><disposition>DISMISSED</disposition><disposition_date_freeformat>03/01/2020</disposition_date_freeformat><filing_date_freeformat>01/15/2020</filing_date_freeformat></chargeinfo></case></postResults></ScreeningResults>"
   }
 }

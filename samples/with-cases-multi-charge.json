@@ -1,0 +1,46 @@
+{
+  "record": {
+    "search_id": "sample-cases-multi-001",
+    "search_date": "2026-04-10",
+    "order_id": "90010005",
+    "order_number": "90010005.1",
+    "applicant_state": "KS",
+    "search_type": "County_criminal",
+    "candidate_info": {
+      "first_name": "Alex",
+      "middle_name": "J",
+      "last_name": "Rivera",
+      "date_of_birth": "1985-06-20",
+      "ssn": "123-45-6789",
+      "address": "200 Oak St, Newton, KS 67114"
+    },
+    "cases": [
+      {
+        "court_search_id": "CS90010005A",
+        "offense_id": "34868564",
+        "is_excluded": false
+      },
+      {
+        "court_search_id": "CS90010005A",
+        "offense_id": "34868565",
+        "is_excluded": false
+      },
+      {
+        "court_search_id": "CS90010005A",
+        "offense_id": "34868566",
+        "is_excluded": false
+      },
+      {
+        "court_search_id": "CS90010005B",
+        "offense_id": "34868567",
+        "is_excluded": false
+      },
+      {
+        "court_search_id": "CS90010005B",
+        "offense_id": "34868568",
+        "is_excluded": false
+      }
+    ],
+    "xml": "<ScreeningResults><postResults filledStatus=\"filled\" order=\"90010005\" subOrder=\"90010005.1\" type=\"County_criminal\" filledCode=\"hits\"><case><case_number>2019-CR-000130</case_number><filing_date>02/26/2019</filing_date><jurisdiction_state>KS</jurisdiction_state><jurisdiction>Harvey</jurisdiction><defendant><name_first>Alex</name_first><name_middle>J</name_middle><name_last>Rivera</name_last><dob>6/20/1985</dob><ssn>123456789</ssn><address><address>200 Oak St</address><city>Newton</city><state>KS</state><zip>67114</zip></address></defendant><chargeinfo><charge>Domestic battery</charge><crime_type>Misdemeanor Class B</crime_type><disposition>Guilty Plea</disposition><filing_date_freeformat>2/26/2019</filing_date_freeformat><disposition_date_freeformat>8/19/2019</disposition_date_freeformat></chargeinfo><chargeinfo><charge>Aggravated battery</charge><crime_type>Felony Level 7</crime_type><disposition>Dismissal</disposition><filing_date_freeformat>2/26/2019</filing_date_freeformat><disposition_date_freeformat>8/19/2019</disposition_date_freeformat></chargeinfo><chargeinfo><charge>Criminal damage to property</charge><crime_type>Misdemeanor Class B</crime_type><disposition>Dismissal</disposition><filing_date_freeformat>2/26/2019</filing_date_freeformat><disposition_date_freeformat>8/19/2019</disposition_date_freeformat></chargeinfo></case><case><case_number>2020-TR-001261</case_number><filing_date>10/27/2020</filing_date><jurisdiction_state>KS</jurisdiction_state><jurisdiction>Harvey</jurisdiction><defendant><name_first>Alex</name_first><name_middle>J</name_middle><name_last>Rivera</name_last><dob>6/20/1985</dob><ssn>123456789</ssn><address><address>200 Oak St</address><city>Newton</city><state>KS</state><zip>67114</zip></address></defendant><chargeinfo><charge>Driving under influence 3rd</charge><crime_type>Misdemeanor Class A</crime_type><disposition>Guilty Plea</disposition><filing_date_freeformat>10/27/2020</filing_date_freeformat><disposition_date_freeformat>7/19/2021</disposition_date_freeformat></chargeinfo><chargeinfo><charge>Failure to stop at railroad crossing</charge><crime_type>INFRACTION</crime_type><disposition>Dismissal</disposition><filing_date_freeformat>10/27/2020</filing_date_freeformat><disposition_date_freeformat>7/19/2021</disposition_date_freeformat></chargeinfo></case></postResults></ScreeningResults>"
+  }
+}
