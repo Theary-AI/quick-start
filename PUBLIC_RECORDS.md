@@ -95,7 +95,24 @@ EOF
 - Required on `record`: `search_id`, `search_date`, `order_id`, `order_number`, `candidate_info`, and `xml` (or `record_json` for resubmit).
 - Full contract: [Order → Search → Evaluate](https://docs.pr.snh-ai.com/how-it-works#order--search--evaluate-contract)
 
+## Sample pack
+
+Copy-paste evaluate bodies (traffic, reportable, insufficient-data, resubmit, BackgroundReportPackage, OrderXML) live in:
+
+- Repo: [`samples/`](./samples/)
+- Docs: https://docs.pr.snh-ai.com/samples/overview
+
+Example:
+
+```bash
+curl -s "$PUBLIC_RECORDS_API_BASE_URL/evaluate" \
+  -H "Authorization: Bearer $TOKEN" \
+  -H "Content-Type: application/json" \
+  --data @samples/traffic-not-reportable.json
+```
+
 ## Docs
 
 - Product docs: https://docs.pr.snh-ai.com
 - Evaluate API: https://docs.pr.snh-ai.com/api-reference/endpoints/evaluate
+- Sample pack: https://docs.pr.snh-ai.com/samples/overview

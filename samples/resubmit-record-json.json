@@ -1,0 +1,50 @@
+{
+  "record": {
+    "search_id": "sample-resubmit-001",
+    "search_date": "2026-06-16",
+    "order_id": "90010004",
+    "order_number": "90010004.1",
+    "submission_type": "resubmit",
+    "applicant_state": "NC",
+    "candidate_info": {
+      "first_name": "John",
+      "middle_name": "A",
+      "last_name": "Doe",
+      "date_of_birth": "2000-01-01",
+      "ssn": "123-45-6789",
+      "address": "123 Main St, Charlotte, NC 28202"
+    },
+    "record_json": {
+      "criminal_search_results": [
+        {
+          "court_search_id": "CS40929433A",
+          "search_date": "2026-06-16",
+          "criminal_records": [
+            {
+              "case_number": "2009D 008764",
+              "jurisdiction_state": "NC",
+              "file_date": "2009-02-10",
+              "subject_name": "JOHN A DOE",
+              "sub_first_name": "John",
+              "sub_middle_name": "A",
+              "sub_last_name": "Doe",
+              "subject_dob": "2000-01-01",
+              "subject_ssn": "123-45-6789",
+              "subject_address": "123 Main St, Charlotte, NC 28202",
+              "offenses": [
+                {
+                  "offense_id": "34789896",
+                  "type": "Misdemeanor",
+                  "charge": "Speeding",
+                  "disposition": "Guilty",
+                  "charge_date": "2009-02-10",
+                  "disposition_date": "2009-02-10"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
