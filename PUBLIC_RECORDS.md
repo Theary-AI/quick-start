@@ -95,13 +95,13 @@ EOF
 ## Notes for the first path
 
 - **One search per call** — there is no batch API. Same `order_id` across searches; unique `order_number` + `search_id` per call.
-- **Omit `cases[]`** until you need offense ID mapping or exclusions.
+- **Omit `cases[]`** for the simplest path. When you need your own court/offense IDs, see `samples/with-cases-mapping.json` (full mapping required; each row needs `is_excluded`).
 - Required on `record`: `search_id`, `search_date`, `order_id`, `order_number`, `candidate_info`, and `xml` (or `record_json` for resubmit).
 - Full contract: [Order → Search → Evaluate](https://docs.pr.snh-ai.com/how-it-works#order--search--evaluate-contract)
 
 ## Sample pack
 
-Copy-paste evaluate bodies (traffic, reportable, insufficient-data, resubmit, BackgroundReportPackage, OrderXML) live in:
+Copy-paste evaluate bodies (traffic, reportable, insufficient-data, resubmit, schemas, `with-cases-mapping`) live in:
 
 - Repo: [`samples/`](./samples/)
 - Docs: https://docs.pr.snh-ai.com/samples/overview
