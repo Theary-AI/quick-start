@@ -47,11 +47,15 @@ You should get HTTP **200** with `data.decision` containing:
 
 ## 4. What to do with the result
 
-| Queue | Customer action |
-|-------|-----------------|
-| `Automation` | Auto-handle (usually exclude not-reportable charges) |
-| `Auditor` | Send to human audit before reporting |
-| `Insufficient Data` | Investigate missing data or resubmit corrected JSON |
+Pick **queue** or **decision** (one is usually enough; both only if routing and report labeling are separate steps):
+
+| Queue | Decision (rollup) | Customer action |
+|-------|-------------------|-----------------|
+| `Automation` | `NOT_REPORTABLE` | Auto-handle (usually exclude not-reportable charges) |
+| `Auditor` | `REPORTABLE` | Send to human audit before reporting |
+| `Insufficient Data` | `MANUAL_REVIEW` | Investigate missing data or resubmit corrected JSON |
+
+Full guide: https://docs.pr.snh-ai.com/guides/queue-next-action
 
 ## Curl smoke test (no UI)
 
