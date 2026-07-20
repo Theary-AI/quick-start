@@ -94,12 +94,14 @@ export async function evaluateRecord(): Promise<EvaluateResponse> {
 
   // /evaluate is SYNCHRONOUS — no webhooks. The routing decision comes back in
   // this same response. The record is wrapped under \`record\`.
+  // Omit cases[] on the first path — every offense in the XML is evaluated.
   const body = {
     record: {
       search_id: '55788321',
       search_date: '2026-04-10',
+      order_id: '72849305',
+      order_number: '72849305.1',
       applicant_state: 'OR',
-      offense_ids: ['2050', '2051', '2052'],
       candidate_info: {
         first_name: 'Marcus',
         middle_name: 'R',
@@ -150,8 +152,9 @@ curl -s "$PUBLIC_RECORDS_API_BASE_URL/evaluate" \\
     "record": {
       "search_id": "55788321",
       "search_date": "2026-04-10",
+      "order_id": "72849305",
+      "order_number": "72849305.1",
       "applicant_state": "OR",
-      "offense_ids": ["2050", "2051", "2052"],
       "candidate_info": {
         "first_name": "Marcus", "last_name": "Thompson",
         "date_of_birth": "1991-03-14", "ssn": "445667890",

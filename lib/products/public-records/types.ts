@@ -1,9 +1,10 @@
 /**
  * Types for the Public Records product, mirroring the CRA evaluation framework
  * (`POST /evaluate`). The endpoint synchronously evaluates a single criminal /
- * court record (supplied as the raw screening XML plus candidate identifiers)
- * and returns a compliance routing decision. Only the fields exercised by this
- * quickstart are modeled; see the API reference (`/docs`) for the full schema.
+ * court record and returns a compliance routing decision.
+ *
+ * First-path tip: omit `cases` to evaluate every offense in the XML. Send
+ * `cases` only when you need court/offense ID mapping or exclusions.
  */
 
 /** Candidate identifiers used for identity matching against the record. */
@@ -12,18 +13,28 @@ export interface CandidateInfo {
   middle_name?: string
   last_name: string
   date_of_birth: string
-  ssn: string
-  address: string
+  ssn?: string
+  address?: string
+}
+
+/** Optional charge mapping row. When used, every offense in the XML must appear. */
+export interface CaseMapping {
+  court_search_id: string
+  offense_id: string
+  is_excluded: boolean
 }
 
 /** The record payload sent to `/evaluate`, wrapped under `record`. */
 export interface EvaluateRecord {
   search_id: string
   search_date: string
-  applicant_state: string
-  offense_ids: string[]
+  order_id: string
+  order_number: string
+  applicant_state?: string
   candidate_info: CandidateInfo
   xml: string
+  /** Optional — omit to evaluate all offenses. */
+  cases?: CaseMapping[]
 }
 
 export interface EvaluateRequest {
@@ -34,8 +45,9 @@ export interface EvaluateRequest {
 export interface PublicRecordsFormInput {
   searchId: string
   searchDate: string
+  orderId: string
+  orderNumber: string
   applicantState: string
-  offenseIds: string
   candidate: CandidateInfo
   xml: string
 }
@@ -53,6 +65,7 @@ export interface OffenseDecision {
   offense_id: string
   charge: string
   charge_decision: string
+  rationale?: string
   routing: OffenseRouting
 }
 
@@ -71,11 +84,17 @@ export interface CourtDecision {
 export interface RecordDecision {
   search_queue: string
   record_decision: string
+  order_id?: string
+  order_number?: string
   court_decisions: CourtDecision[]
 }
 
 export interface EvaluateValidation {
-  issues?: unknown[]
+  status?: string
+  issues?: {
+    errors?: unknown[]
+    warnings?: unknown[]
+  }
 }
 
 export interface EvaluateTiming {
@@ -87,7 +106,8 @@ export interface EvaluateTiming {
 export interface EvaluateData {
   search_id: string
   correlation_id: string
-  status: 'success' | 'partial' | 'failed' | string
+  status: 'success' | 'partial' | 'failed' | 'validation_required' | string
+  errors?: string[]
   decision?: RecordDecision
   validation?: EvaluateValidation
   timing?: EvaluateTiming

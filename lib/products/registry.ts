@@ -52,7 +52,7 @@ export const PRODUCTS: ProductMeta[] = [
     accent: 'emerald',
     icon: 'folder-search',
     capabilities: ['Record evaluation', 'Compliance routing', 'Identity scoring', 'Synchronous decision'],
-    docsUrl: 'https://cra.pr.stg.snh-ai.com/docs',
+    docsUrl: 'https://docs.pr.snh-ai.com',
   },
 ]
 

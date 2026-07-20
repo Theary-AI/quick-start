@@ -3,10 +3,16 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Icon } from '@/components/Icon'
 import { JsonView } from '@/components/JsonView'
-import { buildEvaluateRequest, parseOffenseIds, SAMPLE_FORM } from '@/lib/products/public-records/sample'
+import { buildEvaluateRequest, SAMPLE_FORM } from '@/lib/products/public-records/sample'
 import type { EvaluateResponse, OffenseDecision, PublicRecordsFormInput } from '@/lib/products/public-records/types'
 
-type FieldPath = 'searchId' | 'searchDate' | 'applicantState' | 'offenseIds' | `candidate.${keyof PublicRecordsFormInput['candidate']}`
+type FieldPath =
+  | 'searchId'
+  | 'searchDate'
+  | 'orderId'
+  | 'orderNumber'
+  | 'applicantState'
+  | `candidate.${keyof PublicRecordsFormInput['candidate']}`
 
 interface EvaluateResult {
   ok: boolean
@@ -78,12 +84,12 @@ function validate(form: PublicRecordsFormInput, xmlInfo: XmlInfo): FieldErrors {
 
   if (!form.searchId.trim()) e.searchId = 'Required'
   if (!form.searchDate) e.searchDate = 'Required'
+  if (!form.orderId.trim()) e.orderId = 'Required'
+  if (!form.orderNumber.trim()) e.orderNumber = 'Required'
 
   const state = form.applicantState.trim().toUpperCase()
   if (!state) e.applicantState = 'Required'
   else if (!US_STATES.has(state)) e.applicantState = 'Use a 2-letter state code'
-
-  if (parseOffenseIds(form.offenseIds).length === 0) e.offenseIds = 'Add at least one offense ID'
 
   if (!form.candidate.first_name.trim()) e['candidate.first_name'] = 'Required'
   if (!form.candidate.last_name.trim()) e['candidate.last_name'] = 'Required'
@@ -96,9 +102,11 @@ function validate(form: PublicRecordsFormInput, xmlInfo: XmlInfo): FieldErrors {
     else if (dob > new Date()) e['candidate.date_of_birth'] = 'Must be in the past'
   }
 
-  const ssnDigits = form.candidate.ssn.replace(/\D/g, '')
-  if (!form.candidate.ssn.trim()) e['candidate.ssn'] = 'Required'
-  else if (ssnDigits.length !== 9) e['candidate.ssn'] = 'Must be 9 digits'
+  const ssn = form.candidate.ssn?.trim() ?? ''
+  if (ssn) {
+    const ssnDigits = ssn.replace(/\D/g, '')
+    if (ssnDigits.length !== 9) e['candidate.ssn'] = 'Must be 9 digits'
+  }
 
   if (!xmlInfo.ok) e.xml = xmlInfo.error ?? 'Invalid XML'
 
@@ -287,7 +295,6 @@ export function EvaluateConsole() {
   const xmlInfo = useMemo(() => inspectXml(form.xml), [form.xml])
   const errors = useMemo(() => validate(form, xmlInfo), [form, xmlInfo])
   const errorCount = Object.keys(errors).length
-  const offenseChips = useMemo(() => parseOffenseIds(form.offenseIds), [form.offenseIds])
   const previewBody = useMemo(() => buildEvaluateRequest(form), [form])
 
   const hasCredentials = Boolean(config?.config.hasCredentials)
@@ -367,26 +374,27 @@ export function EvaluateConsole() {
               <Field label="Search date" type="date" required value={form.searchDate} onChange={(v) => set('searchDate', v)} error={err('searchDate')} />
             </div>
             <div className="grid grid-cols-2 gap-3">
+              <Field label="Order ID" required value={form.orderId} onChange={(v) => set('orderId', v)} error={err('orderId')} />
               <Field
-                label="Applicant state"
+                label="Order number"
                 required
-                value={form.applicantState}
-                onChange={(v) => set('applicantState', v.toUpperCase().slice(0, 2))}
-                placeholder="OR"
-                error={err('applicantState')}
+                value={form.orderNumber}
+                onChange={(v) => set('orderNumber', v)}
+                placeholder="72849305.1"
+                error={err('orderNumber')}
               />
-              <Field label="Offense IDs" required value={form.offenseIds} onChange={(v) => set('offenseIds', v)} placeholder="2050, 2051" error={err('offenseIds')} />
             </div>
-            {offenseChips.length > 0 ? (
-              <div className="flex flex-wrap items-center gap-1.5">
-                <span className="text-xs text-[var(--color-subtle)]">Parsed {offenseChips.length}:</span>
-                {offenseChips.map((id) => (
-                  <span key={id} className="rounded-md bg-[var(--color-surface-2)] px-2 py-0.5 font-mono text-xs text-[var(--color-body)] ring-1 ring-[var(--color-border)]">
-                    {id}
-                  </span>
-                ))}
-              </div>
-            ) : null}
+            <Field
+              label="Applicant state"
+              required
+              value={form.applicantState}
+              onChange={(v) => set('applicantState', v.toUpperCase().slice(0, 2))}
+              placeholder="OR"
+              error={err('applicantState')}
+            />
+            <p className="text-xs text-[var(--color-subtle)]">
+              This first path omits <code className="font-mono">cases[]</code> so every offense in the XML is evaluated.
+            </p>
           </Section>
 
           <Section title="Candidate">
@@ -397,9 +405,9 @@ export function EvaluateConsole() {
             </div>
             <div className="grid grid-cols-2 gap-3">
               <Field label="Date of birth" type="date" required value={form.candidate.date_of_birth} onChange={(v) => set('candidate.date_of_birth', v)} error={err('candidate.date_of_birth')} />
-              <Field label="SSN" required value={form.candidate.ssn} onChange={(v) => set('candidate.ssn', v)} placeholder="445667890" inputMode="numeric" error={err('candidate.ssn')} />
+              <Field label="SSN" value={form.candidate.ssn ?? ''} onChange={(v) => set('candidate.ssn', v)} placeholder="445667890" inputMode="numeric" error={err('candidate.ssn')} />
             </div>
-            <Field label="Address" value={form.candidate.address} onChange={(v) => set('candidate.address', v)} />
+            <Field label="Address" value={form.candidate.address ?? ''} onChange={(v) => set('candidate.address', v)} />
           </Section>
 
           <Section title="Screening XML">
