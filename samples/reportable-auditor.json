@@ -1,0 +1,18 @@
+{
+  "record": {
+    "search_id": "sample-reportable-001",
+    "search_date": "2026-04-10",
+    "order_id": "90010002",
+    "order_number": "90010002.1",
+    "applicant_state": "TX",
+    "candidate_info": {
+      "first_name": "Marcus",
+      "middle_name": "R",
+      "last_name": "Thompson",
+      "date_of_birth": "1991-03-14",
+      "ssn": "445-66-7890",
+      "address": "782 Elm Avenue, Portland, OR 97205"
+    },
+    "xml": "<ScreeningResults><postResults filledStatus=\"filled\" order=\"90010002\" subOrder=\"90010002.1\" type=\"County_criminal\" filledCode=\"hits\"><case><case_number>KXL308742</case_number><filing_date>05/03/2024</filing_date><disposition_date>06/19/2024</disposition_date><jurisdiction_state>CA</jurisdiction_state><jurisdiction>Orange</jurisdiction><defendant><name_first>Marcus</name_first><name_middle>R</name_middle><name_last>Thompson</name_last><dob>3/14/1991</dob><ssn>445667890</ssn><address><address>782 Elm Avenue</address><city>Portland</city><state>OR</state><zip>97205</zip></address></defendant><chargeinfo><charge>PETTY THEFT</charge><statute>PC 484(A)</statute><crime_type>MISDEMEANOR</crime_type><disposition>CONVICTED</disposition><plea>GUILTY</plea><filing_date_freeformat>05/03/2024</filing_date_freeformat><disposition_date_freeformat>06/19/2024</disposition_date_freeformat></chargeinfo></case></postResults></ScreeningResults>"
+  }
+}

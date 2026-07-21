@@ -1,0 +1,18 @@
+{
+  "record": {
+    "search_id": "sample-brp-001",
+    "search_date": "2026-04-10",
+    "order_id": "90010005",
+    "order_number": "90010005.1",
+    "applicant_state": "TX",
+    "candidate_info": {
+      "first_name": "John",
+      "middle_name": "A",
+      "last_name": "Doe",
+      "date_of_birth": "1990-05-15",
+      "ssn": "123-45-6789",
+      "address": "123 Main St, Los Angeles, CA 90001"
+    },
+    "xml": "<BackgroundReportPackage><ScreeningsSummary><Organization><OrganizationName>ScreeningCo</OrganizationName></Organization><PersonalData><PersonName><GivenName>JOHN</GivenName><MiddleName>A</MiddleName><FamilyName>DOE</FamilyName></PersonName><DateOfBirth>1990-05-15</DateOfBirth></PersonalData></ScreeningsSummary><Screenings><Screening type=\"Criminal\"><ScreeningStatus><OrderStatus>COMPLETED</OrderStatus><DateOrderReceived>2025-04-30</DateOrderReceived></ScreeningStatus><Region>TX</Region><County>Harris</County><Results><Result><CaseNumber>2024-CF-00312</CaseNumber><CourtName>Harris County Criminal Court</CourtName><State>TX</State><County>Harris</County><FileDate>2024-01-15</FileDate><SubjectIdentification><PersonName><GivenName>JOHN</GivenName><FamilyName>DOE</FamilyName></PersonName><DateOfBirth>1990-05-15</DateOfBirth></SubjectIdentification><Charges><Charge><Description>THEFT OF PROPERTY &gt;= $2,500</Description><Type>FELONY</Type><Disposition>GUILTY</Disposition><DispositionDate>2024-06-20</DispositionDate></Charge></Charges></Result></Results></Screening></Screenings></BackgroundReportPackage>"
+  }
+}

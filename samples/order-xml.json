@@ -1,0 +1,18 @@
+{
+  "record": {
+    "search_id": "sample-orderxml-001",
+    "search_date": "2026-04-10",
+    "order_id": "90010006",
+    "order_number": "90010006.1",
+    "applicant_state": "TX",
+    "candidate_info": {
+      "first_name": "John",
+      "middle_name": "A",
+      "last_name": "Doe",
+      "date_of_birth": "1990-05-15",
+      "ssn": "123-45-6789",
+      "address": "123 Main St, Austin, TX 78701"
+    },
+    "xml": "<OrderXML><Order><Subject><FirstName>JOHN</FirstName><MiddleName>A</MiddleName><LastName>DOE</LastName><DateOfBirth>05/15/1990</DateOfBirth><SSN>123-45-6789</SSN><Address>123 Main St, Austin, TX 78701</Address></Subject><OrderDetail OrderId=\"90010006\" ServiceCode=\"County_criminal\"><Status>COMPLETE</Status><State>TX</State><County>Harris</County><Result><Record><CaseNumber>2024-CF-00312</CaseNumber><FileDate>01/15/2024</FileDate><DOB>05/15/1990</DOB><DefendantName>DOE, JOHN A</DefendantName><Count><Charge>THEFT OF PROPERTY &gt;= $2,500</Charge><Type>FELONY</Type><Disposition>GUILTY</Disposition><DispositionDate>06/20/2024</DispositionDate><OffenseDate>12/01/2023</OffenseDate></Count></Record></Result></OrderDetail></Order></OrderXML>"
+  }
+}
