@@ -75,5 +75,12 @@ function safeEqual(a: string, b: string): boolean {
 export const config = {
   // Run on everything except Next.js internals and static asset requests, so the
   // login prompt covers the app without needlessly gating framework assets.
-  matcher: ['/((?!_next/static|_next/image|favicon.ico).*)'],
+  //
+  // Public files under `public/` (e.g. the logo) must also be exempt: the
+  // `next/image` optimizer fetches the source asset via an internal, server-side
+  // request that carries no Basic Auth header, so gating those paths makes the
+  // optimizer receive a 401 and the image renders broken on hosted demos.
+  matcher: [
+    '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:png|jpg|jpeg|gif|webp|svg|ico|css|js|woff2?|ttf|otf|map|txt)$).*)',
+  ],
 }
